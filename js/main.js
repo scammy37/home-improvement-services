@@ -11,7 +11,8 @@
   // Service pages set data-service (the service shown) and data-base (path back to the site root).
   const PAGE_SERVICE = document.body.dataset.service || '';
   const BASE = document.body.dataset.base || '';
-  const pageUrl = (id) => BASE + 'services/' + id + '.html';
+  // Service pages live at <id>/index.html; link to the folder except when browsing local files.
+  const pageUrl = (id) => BASE + id + (location.protocol === 'file:' ? '/index.html' : '/');
   const asset = (path) => /^(https?:)?\/\//.test(path) ? path : BASE + path;
 
   /* ---------- Business details ---------- */

@@ -22,8 +22,8 @@ window.SITE = {
     // Leave blank and the form falls back to opening the visitor's email app.
     formspreeId: '',
     // Your live site address, used for the sitemap and search-engine tags.
-    // With GitHub Pages this is https://<username>.github.io/<repo>/ unless you add a custom domain.
-    siteUrl: 'https://scammy37.github.io/home-improvement-services/'
+    // With GitHub Pages this is https://<your domain>/<repo name>/ (or https://<username>.github.io/<repo name>/ without a custom domain).
+    siteUrl: 'https://michaelzagame.com/services/'
   },
 
   // Set to false once the reviews below are replaced with real customer reviews.
