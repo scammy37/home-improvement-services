@@ -14,6 +14,7 @@ import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'nod
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
+import { createHash } from 'node:crypto';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (p) => readFileSync(join(root, p), 'utf8');
@@ -37,6 +38,13 @@ const basePath = siteUrl ? new URL(siteUrl).pathname : '/';
 const tel = 'tel:' + B.phone.replace(/[^\d+]/g, '');
 const money = (n) => '$' + (n < 10 && n % 1 ? n.toFixed(2) : Math.round(n).toLocaleString('en-US'));
 const unitShort = (s) => s.unit === 'hours' ? 'hr' : s.unit === 'windows' ? 'window' : s.unit.split(' of ')[0];
+
+// Cache busting: stamp CSS/JS links with a fingerprint of the file so browsers
+// fetch fresh copies after every change (GitHub Pages caches files for 10 minutes).
+const assets = ['css/styles.css', 'js/data.js', 'js/scenes.js', 'js/main.js'];
+const fingerprint = Object.fromEntries(assets.map((a) => [a, createHash('sha256').update(read(a)).digest('hex').slice(0, 8)]));
+const versionAssets = (html) => html.replace(/((?:\.\.\/)?)(css\/styles\.css|js\/(?:data|scenes|main)\.js)(?:\?v=[\w-]*)?"/g,
+  (_, prefix, file) => `${prefix}${file}?v=${fingerprint[file]}"`);
 
 /* ---------- Pull shared blocks out of index.html ---------- */
 const index = read('index.html');
@@ -102,7 +110,7 @@ const indexOut = index.replace(
   `<!-- build:jsonld -->\n  ${siteUrl ? `<link rel="canonical" href="${siteUrl}">\n  ` : ''}${ldScript(businessLd).replace(/\n/g, '\n  ')}\n  <!-- /build:jsonld -->`
 );
 if (indexOut === index && !index.includes('<!-- build:jsonld -->')) throw new Error('index.html is missing the <!-- build:jsonld --> marker');
-write('index.html', indexOut);
+write('index.html', versionAssets(indexOut));
 
 /* ---------- Service pages ---------- */
 const head = ({ title, description, path, extra = '' }) => `<!doctype html>
@@ -114,8 +122,8 @@ const head = ({ title, description, path, extra = '' }) => `<!doctype html>
   <meta name="description" content="${esc(description)}">
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(description)}">
-  <meta name="theme-color" content="#16302a">${siteUrl ? `\n  <link rel="canonical" href="${siteUrl}${path}">` : ''}
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 3 14h4v14h18V14h4z' fill='%23315c49'/%3E%3Crect x='13' y='18' width='6' height='10' fill='%23dd7656'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#0f0f0d">${siteUrl ? `\n  <link rel="canonical" href="${siteUrl}${path}">` : ''}
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 3 14h4v14h18V14h4z' fill='%23c9a063'/%3E%3Crect x='13' y='18' width='6' height='10' fill='%2316130d'/%3E%3C/svg%3E">
   <link rel="preload" href="../fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../css/styles.css">${extra}
@@ -255,10 +263,10 @@ readdirSync(root, { withFileTypes: true })
   .filter((d) => d.isDirectory() && generated(d.name))
   .forEach((d) => rmSync(join(root, d.name), { recursive: true, force: true }));
 rmSync(join(root, 'services'), { recursive: true, force: true });
-S.services.forEach((s) => write(`${s.id}/index.html`, servicePage(s)));
+S.services.forEach((s) => write(`${s.id}/index.html`, versionAssets(servicePage(s))));
 
 /* ---------- 404 page ---------- */
-write('404.html', fillBindings(`<!doctype html>
+write('404.html', versionAssets(fillBindings(`<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -287,7 +295,7 @@ write('404.html', fillBindings(`<!doctype html>
   </main>
 </body>
 </html>
-`));
+`)));
 
 /* ---------- Sitemap & robots ---------- */
 if (siteUrl) {
