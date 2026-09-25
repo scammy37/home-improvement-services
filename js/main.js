@@ -7,6 +7,9 @@
   const roundTo = (n, step) => Math.round(n / step) * step;
   const esc = (str) => String(str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const serviceById = (id) => S.services.find((s) => s.id === id);
+  const unitShort = (s) => s.unit === 'hours' ? 'hr' : s.unit === 'windows' ? 'window' : s.unit.split(' of ')[0];
+  const startingPrice = (s) => money(Object.values(s.tiers)[0][0]) + '/' + unitShort(s);
+  const arrowIcon = '<span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>';
 
   // Service pages set data-service (the service shown) and data-base (path back to the site root).
   const PAGE_SERVICE = document.body.dataset.service || '';
@@ -19,7 +22,9 @@
   const tel = 'tel:' + B.phone.replace(/[^\d+]/g, '');
   $$('[data-bind]').forEach((el) => { el.textContent = B[el.dataset.bind] ?? ''; });
   $$('[data-bind-href="tel"]').forEach((el) => { el.href = tel; });
+  $$('.phone-link').forEach((el) => el.setAttribute('aria-label', 'Call ' + B.phone));
   $$('[data-bind-href="mailto"]').forEach((el) => { el.href = 'mailto:' + B.email; });
+  $$('[data-area-first]').forEach((el) => { el.textContent = B.serviceArea[0]; });
   $('#year').textContent = new Date().getFullYear();
 
   /* ---------- Header ---------- */
@@ -63,73 +68,65 @@
     toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
   }
 
-  /* ---------- Services ---------- */
-  const unitShort = (s) => s.unit === 'hours' ? 'hr' : s.unit === 'windows' ? 'window' : s.unit.split(' of ')[0];
-  const startingPrice = (s) => money(Object.values(s.tiers)[0][0]) + '/' + unitShort(s);
-
-  const categories = [['all', 'All services'], ['outdoor', 'Outdoor'], ['painting', 'Painting'], ['remodeling', 'Remodeling'], ['interior', 'Interior'], ['exterior', 'Exterior']]
-    .filter(([id]) => id === 'all' || S.services.some((s) => s.category === id));
-  const filterBox = $('#service-filters');
-  if (filterBox) filterBox.innerHTML = categories.map(([id, label], i) =>
-    `<button class="filter" role="tab" data-cat="${id}" aria-selected="${i === 0}">${label}</button>`).join('');
-
-  function renderServices(cat) {
-    $('#service-grid').innerHTML = S.services
-      .filter((s) => s.id !== PAGE_SERVICE && (cat === 'all' || s.category === cat))
-      .map((s, i) => `
-        <article class="service-card" style="animation-delay:${i * 40}ms">
-          <div class="service-icon">${ART.icon(s.icon)}</div>
-          <h3><a class="card-link" href="${pageUrl(s.id)}">${esc(s.name)}</a></h3>
-          <p>${esc(s.blurb)}</p>
-          <ul>${s.bullets.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>
-          <div class="from">
-            <span>From <strong>${startingPrice(s)}</strong></span>
-            <a class="link-btn" href="${pageUrl(s.id)}">Details →</a>
-          </div>
-        </article>`).join('');
+  /* ---------- Trust strip ---------- */
+  const trustStrip = $('#trust-strip');
+  if (trustStrip) {
+    const check = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#e5ebde"/><path d="m7 12.5 3.2 3.2L17 9" fill="none" stroke="#1f4338" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const points = [...(S.trustPoints || []), `${B.warrantyYears}-year warranty`];
+    trustStrip.innerHTML = points.map((p) => `<li>${check}${esc(p)}</li>`).join('');
   }
-  filterBox?.addEventListener('click', (e) => {
-    const btn = e.target.closest('.filter');
-    if (!btn) return;
-    $$('.filter', filterBox).forEach((b) => b.setAttribute('aria-selected', String(b === btn)));
-    renderServices(btn.dataset.cat);
-  });
-  renderServices('all');
 
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-estimate]');
-    if (!btn) return;
-    selectEstimateService(btn.dataset.estimate);
-    $('#estimate').scrollIntoView();
-  });
-
+  /* ---------- Services ---------- */
+  function serviceCard(s, size) {
+    const featured = size && s.featured;
+    const project = S.projects.find((p) => p.service === s.id);
+    const art = featured
+      ? `<div class="svc-art" aria-hidden="true">${ART.scene(project ? project.scene : 'room', true)}</div><span class="pill">Popular</span>`
+      : `<div class="svc-icon" aria-hidden="true">${ART.icon(s.icon)}</div>`;
+    return `
+      <a class="svc${featured ? ' featured ' + size : ''}" href="${pageUrl(s.id)}">
+        ${art}
+        <h3>${esc(s.name)}</h3>
+        <p>${esc(s.blurb)}</p>
+        <div class="svc-foot"><span>From <strong>${startingPrice(s)}</strong></span>${arrowIcon}</div>
+      </a>`;
+  }
+  const serviceGrid = $('#service-grid');
+  if (serviceGrid) {
+    const others = S.services.filter((s) => s.id !== PAGE_SERVICE);
+    const featured = PAGE_SERVICE ? [] : others.filter((s) => s.featured);
+    const sizes = ['size-xl', 'size-wide', 'size-wide'];
+    serviceGrid.innerHTML = [
+      ...featured.sort((a, b) => (a.id === 'kitchen' ? -1 : b.id === 'kitchen' ? 1 : 0)).map((s, i) => serviceCard(s, sizes[i] || 'size-wide')),
+      ...others.filter((s) => !featured.includes(s)).map((s) => serviceCard(s))
+    ].join('');
+  }
   $('#footer-services').innerHTML = S.services.map((s) => `<li><a href="${pageUrl(s.id)}">${esc(s.name)}</a></li>`).join('');
 
-  /* ---------- Quick quote (hero, home page only) ---------- */
-  const qqGrid = $('#qq-services');
-  if (qqGrid) {
-  const qqServices = S.services.slice(0, 6);
-  let qqChoice = qqServices[0].id;
-  qqGrid.innerHTML = qqServices.map((s, i) =>
-    `<button type="button" class="qq-option" role="radio" aria-checked="${i === 0}" data-id="${s.id}">${ART.icon(s.icon)}${esc(s.name.replace(' Remodeling', ''))}</button>`).join('');
-  qqGrid.addEventListener('click', (e) => {
-    const btn = e.target.closest('.qq-option');
-    if (!btn) return;
-    qqChoice = btn.dataset.id;
-    $$('.qq-option', qqGrid).forEach((b) => b.setAttribute('aria-checked', String(b === btn)));
-  });
-  $('#quick-quote').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const zip = e.target.zip.value.trim();
-    if (zip) $('#contact-form').zip.value = zip;
-    selectEstimateService(qqChoice);
-    $('#estimate').scrollIntoView();
-  });
+  /* ---------- Hero collage (home page) ---------- */
+  const heroVisual = $('#hero-visual');
+  if (heroVisual) {
+    const quote = S.reviews.find((r) => r.rating === 5 && r.text.length < 170) || S.reviews[0];
+    const short = quote.text.length > 110 ? quote.text.slice(0, quote.text.lastIndexOf(' ', 105)) + '…' : quote.text;
+    const shield = '<svg viewBox="0 0 24 24" fill="none" stroke="#1f4338" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>';
+    heroVisual.innerHTML = `
+      <div class="hv-card hv-main">${ART.scene('kitchen', true)}
+        <div class="hv-caption"><div><strong>Open-concept kitchen</strong><small>Northside · finished in 3 weeks</small></div><span class="tag">After</span></div>
+      </div>
+      <div class="hv-card">${ART.scene('deck', true)}</div>
+      <div class="hv-card hv-review">
+        <blockquote>“${esc(short)}”</blockquote>
+        <footer><span class="stars">★★★★★</span>${esc(quote.name)}</footer>
+      </div>
+      <div class="hv-badge"><span class="ico">${shield}</span><span><b>${B.warrantyYears}-year warranty</b>on all workmanship</span></div>`;
   }
 
-  /* ---------- Process & FAQ & areas ---------- */
+  /* ---------- Why us, process, FAQ, areas ---------- */
+  const whyGrid = $('#why-grid');
+  if (whyGrid) whyGrid.innerHTML = (S.highlights || []).map(([icon, title, text]) => `
+    <div class="why"><div class="why-icon" aria-hidden="true">${ART.icon(icon)}</div><h3>${esc(title)}</h3><p>${esc(text)}</p></div>`).join('');
   const processList = $('#process-list');
-  if (processList) processList.innerHTML = S.process.map(([t, d]) => `<li class="reveal"><h3>${esc(t)}</h3><p>${esc(d)}</p></li>`).join('');
+  if (processList) processList.innerHTML = S.process.map(([t, d]) => `<li><h3>${esc(t)}</h3><p>${esc(d)}</p></li>`).join('');
   const pageDetails = (S.serviceDetails || {})[PAGE_SERVICE] || {};
   $('#faq-list').innerHTML = [...(pageDetails.faqs || []), ...S.faqs].map(([q, a], i) => `<details class="faq-item"${i === 0 ? ' open' : ''}><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('');
   const areaList = $('#area-list');
@@ -161,9 +158,6 @@
 
     $('#est-addons').innerHTML = s.addons.map(([name, lo, hi], i) => `
       <label class="addon"><input type="checkbox" value="${i}"><span>${esc(name)}</span><small>+${money(lo)}–${money(hi)}</small></label>`).join('');
-
-    const cs = $('#contact-service');
-    if (cs) cs.value = id;
     calc();
   }
 
@@ -225,17 +219,6 @@
   });
   $('#est-complexity').addEventListener('change', (e) => { est.complexity = Number(e.target.value); calc(); });
 
-  $('#est-send').addEventListener('click', () => {
-    const f = $('#contact-form');
-    f.service.value = est.service.id;
-    if (!f.message.value.trim() || f.message.dataset.fromEstimate === 'true') {
-      f.message.value = est.summary + '\n\n';
-      f.message.dataset.fromEstimate = 'true';
-    }
-    setTimeout(() => f.name.focus({ preventScroll: true }), 600);
-    toast('Estimate details added to your quote request');
-  });
-
   /* ---------- Before / after gallery ---------- */
   // Real photos (p.before / p.after) take priority over the built-in illustrations.
   const baImage = (p, after) => {
@@ -250,28 +233,46 @@
     $('#projects').remove();
     $$('a[href="#projects"]').forEach((a) => { a.href = BASE + 'index.html#projects'; });
   }
-  $('#project-grid') && ($('#project-grid').innerHTML = projects.map((p) => {
-    const svc = serviceById(p.service);
-    return `
-      <article class="project reveal">
-        <div class="ba">
-          <div class="before">${baImage(p, false)}</div>
-          <div class="after">${baImage(p, true)}</div>
-          <span class="ba-label b">Before</span><span class="ba-label a">After</span>
-          <div class="ba-handle"></div>
-          <input type="range" min="0" max="100" value="50" aria-label="Compare before and after: ${esc(p.title)}">
-        </div>
-        <div class="project-body">
-          <span class="tag">${esc(svc ? svc.name : '')} · ${esc(p.town)}</span>
-          <h3>${esc(p.title)}</h3>
-          <p>${esc(p.detail)}</p>
-        </div>
-      </article>`;
-  }).join(''));
-  $$('.ba').forEach((ba) => {
-    const input = $('input', ba);
-    input.addEventListener('input', () => ba.style.setProperty('--pos', input.value + '%'));
-  });
+  const projectGrid = $('#project-grid');
+  if (projectGrid) {
+    projectGrid.innerHTML = projects.map((p) => {
+      const svc = serviceById(p.service);
+      return `
+        <article class="project" data-service="${p.service}">
+          <div class="ba">
+            <div class="before">${baImage(p, false)}</div>
+            <div class="after">${baImage(p, true)}</div>
+            <span class="ba-label b">Before</span><span class="ba-label a">After</span>
+            <div class="ba-handle"></div>
+            <input type="range" min="0" max="100" value="50" aria-label="Compare before and after: ${esc(p.title)}">
+          </div>
+          <div class="project-body">
+            <span class="tag">${esc(svc ? svc.name : '')} · ${esc(p.town)}</span>
+            <h3>${esc(p.title)}</h3>
+            <p>${esc(p.detail)}</p>
+          </div>
+        </article>`;
+    }).join('');
+    $$('.ba').forEach((ba) => {
+      const input = $('input', ba);
+      input.addEventListener('input', () => ba.style.setProperty('--pos', input.value + '%'));
+    });
+
+    const filters = $('#project-filters');
+    const used = [...new Set(projects.map((p) => p.service))];
+    if (filters && used.length > 1) {
+      filters.innerHTML = [['all', 'All projects'], ...used.map((id) => [id, serviceById(id)?.name || id])]
+        .map(([id, label], i) => `<button type="button" class="chip" data-filter="${id}" aria-pressed="${i === 0}">${esc(label)}</button>`).join('');
+      filters.addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+        $$('.chip', filters).forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+        $$('.project', projectGrid).forEach((p) => { p.hidden = chip.dataset.filter !== 'all' && p.dataset.service !== chip.dataset.filter; });
+      });
+    } else if (filters) {
+      filters.remove();
+    }
+  }
 
   /* ---------- Reviews ---------- */
   const REVIEW_KEY = 'his-reviews';
@@ -279,7 +280,7 @@
   const saveLocal = (list) => { try { localStorage.setItem(REVIEW_KEY, JSON.stringify(list)); } catch { /* storage unavailable */ } };
   let reviews = [...loadLocal(), ...S.reviews];
   const reviewState = { filter: PAGE_SERVICE || 'all', stars: 0, sort: 'new', shown: 6 };
-  const avatarColors = ['#315c49', '#dd7656', '#b08d57', '#4f7a8a', '#7a5c8a', '#5a7d4f'];
+  const avatarColors = ['#1f4338', '#b0502b', '#7d6240', '#3f6878', '#4a6a51', '#6e5080'];
   const starStr = (n) => '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n);
 
   $('#sample-notice').hidden = !S.showSampleReviewNotice;
@@ -287,7 +288,6 @@
   $('#review-filter').insertAdjacentHTML('beforeend', serviceOpts);
   $('#review-filter').value = reviewState.filter;
   $('#review-service').innerHTML = serviceOpts;
-  $('#contact-service').innerHTML = '<option value="">Select a service…</option>' + serviceOpts + '<option value="other">Something else</option>';
 
   function renderSummary() {
     const total = reviews.length;
@@ -298,8 +298,11 @@
     $('#review-count').textContent = `Based on ${total} reviews`;
     const statRating = $('#stat-rating');
     const heroRating = $('#hero-rating');
+    const heroCount = $('#hero-rating-count');
     if (statRating) statRating.textContent = avgText + '★';
-    if (heroRating) heroRating.textContent = `Rated ${avgText}/5 by ${total}+ homeowners`;
+    if (heroRating) heroRating.textContent = avgText + ' rating';
+    if (heroCount) heroCount.textContent = `from ${total}+ local homeowners`;
+    $$('[data-rating-text]').forEach((el) => { el.textContent = `Rated ${avgText}/5 by ${total}+ homeowners`; });
     $('#rating-bars').innerHTML = [5, 4, 3, 2, 1].map((n) => {
       const c = reviews.filter((r) => r.rating === n).length;
       const pct = total ? (c / total) * 100 : 0;
@@ -405,43 +408,99 @@
   renderSummary();
   renderReviews();
 
-  /* ---------- Contact form ---------- */
+  /* ---------- Quote wizard ---------- */
   const form = $('#contact-form');
+  const steps = $$('.wizard-step', form);
+  const labels = $$('#wizard-labels li');
   const status = $('#form-status');
-  form.message.addEventListener('input', () => { form.message.dataset.fromEstimate = 'false'; });
+  const nextBtn = $('#wizard-next');
+  const backBtn = $('#wizard-back');
+  let current = 0;
 
-  function validate() {
+  $('#wizard-services').innerHTML = [...S.services.map((s) => [s.id, s.name, s.icon]), ['other', 'Something else', 'plus']]
+    .map(([id, name, icon]) => `<label class="option"><input type="radio" name="service" value="${id}"${id === PAGE_SERVICE ? ' checked' : ''}><span>${ART.icon(icon)}${esc(name)}</span></label>`).join('');
+
+  function showStep(i, focus = true) {
+    current = i;
+    steps.forEach((s, n) => { s.hidden = n !== i; });
+    labels.forEach((l, n) => { l.classList.toggle('done', n < i); l.classList.toggle('current', n === i); });
+    $('#wizard-bar-fill').style.width = [12, 38, 64, 88][i] + '%';
+    backBtn.hidden = i === 0;
+    nextBtn.innerHTML = i === steps.length - 1 ? 'Get my free quote <span aria-hidden="true">→</span>' : 'Continue <span aria-hidden="true">→</span>';
+    $('#wizard-status').textContent = `Step ${i + 1} of ${steps.length}: ${labels[i].textContent}`;
+    status.textContent = '';
+    status.className = 'form-status';
+    if (focus) {
+      if (form.getBoundingClientRect().top < 0) form.scrollIntoView({ block: 'start' });
+      const first = $('input:not([type=hidden]):not(.hp), textarea', steps[i]);
+      const checked = $('input:checked', steps[i]);
+      (checked || first)?.focus({ preventScroll: true });
+    }
+  }
+
+  function fieldValid(el) {
+    if (el.type === 'checkbox') return el.checked;
+    return el.value.trim() !== '' && el.checkValidity();
+  }
+  function validateStep(i) {
+    const step = steps[i];
     let ok = true;
-    $$('[required]', form).forEach((el) => {
-      const valid = el.type === 'checkbox' ? el.checked : el.checkValidity() && el.value.trim() !== '';
+    if (i === 0) {
+      ok = !!$('input[name=service]:checked', form);
+      step.classList.toggle('invalid', !ok);
+    }
+    $$('[required]', step).forEach((el) => {
+      const valid = fieldValid(el);
       el.closest('.field').classList.toggle('invalid', !valid);
       if (!valid) ok = false;
     });
+    if (!ok) {
+      status.textContent = i === 0 ? 'Please choose a service to continue.' : 'Please check the highlighted fields.';
+      status.className = 'form-status err';
+      $('.invalid input, .invalid select, .invalid textarea', step)?.focus();
+    }
     return ok;
   }
   form.addEventListener('input', (e) => {
     const f = e.target.closest('.field');
-    if (f && f.classList.contains('invalid')) validate();
+    if (f && f.classList.contains('invalid') && fieldValid(e.target)) f.classList.remove('invalid');
   });
+  form.message.addEventListener('input', () => { form.message.dataset.fromEstimate = 'false'; });
+
+  // Picking a service with the mouse or touch moves straight on to the next step;
+  // keyboard users stay put so arrow keys can move between options.
+  let lastPointer = 0;
+  const serviceOptions = $('#wizard-services');
+  serviceOptions.addEventListener('pointerdown', () => { lastPointer = Date.now(); });
+  serviceOptions.addEventListener('change', () => {
+    steps[0].classList.remove('invalid');
+    status.textContent = '';
+    if (Date.now() - lastPointer < 1500) setTimeout(() => { if (current === 0) showStep(1); }, 220);
+  });
+  backBtn.addEventListener('click', () => showStep(Math.max(0, current - 1)));
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    status.className = 'form-status';
+    if (!validateStep(current)) return;
+    if (current < steps.length - 1) { showStep(current + 1); return; }
     if (form._gotcha.value) return; // bot
-    if (!validate()) {
-      status.textContent = 'Please fill in the highlighted fields.';
-      status.classList.add('err');
-      $('.invalid input, .invalid select, .invalid textarea', form)?.focus();
-      return;
-    }
+
     const data = Object.fromEntries(new FormData(form));
     delete data._gotcha;
     const svc = serviceById(data.service);
-    data.service = svc ? svc.name : data.service;
+    data.service = svc ? svc.name : 'Something else';
+
+    const finish = (text) => {
+      steps.forEach((s) => { s.hidden = true; });
+      form.classList.add('finished');
+      $('#wizard-done-text').textContent = text;
+      const done = $('#wizard-done');
+      done.hidden = false;
+      done.focus();
+    };
 
     if (B.formspreeId) {
-      const btn = $('button[type=submit]', form);
-      btn.disabled = true;
+      nextBtn.disabled = true;
       status.textContent = 'Sending…';
       try {
         const res = await fetch('https://formspree.io/f/' + encodeURIComponent(B.formspreeId), {
@@ -450,29 +509,41 @@
           body: JSON.stringify(data)
         });
         if (!res.ok) throw new Error('HTTP ' + res.status);
-        form.reset();
-        status.textContent = "Thanks! We'll be in touch within one business day.";
-        status.classList.add('ok');
+        const how = data.contactPref === 'Email' ? 'email' : data.contactPref === 'Text' ? 'text' : 'call';
+        finish(`We'll ${how} you within one business day to talk about your ${data.service.toLowerCase()} project.`);
       } catch (err) {
         status.textContent = `Something went wrong. Please call us at ${B.phone}.`;
-        status.classList.add('err');
+        status.className = 'form-status err';
       } finally {
-        btn.disabled = false;
+        nextBtn.disabled = false;
       }
       return;
     }
 
     // No form backend configured: open the visitor's email app with everything filled in
     const body = [
-      `Name: ${data.name}`, `Phone: ${data.phone}`, `Email: ${data.email}`, `ZIP: ${data.zip || '-'}`,
-      `Service: ${data.service}`, `Budget: ${data.budget || 'Not sure'}`, `Timeline: ${data.timeline}`, '', data.message
+      `Name: ${data.name}`, `Phone: ${data.phone}`, `Email: ${data.email}`, `Preferred contact: ${data.contactPref}`,
+      `ZIP: ${data.zip}`, `Property: ${data.property}`, `Service: ${data.service}`, `Budget: ${data.budget}`, `Timeline: ${data.timeline}`, '', data.message || ''
     ].join('\n');
     window.location.href = `mailto:${B.email}?subject=${encodeURIComponent('Quote request: ' + data.service)}&body=${encodeURIComponent(body)}`;
-    status.textContent = 'Opening your email app to send your request…';
-    status.classList.add('ok');
+    finish(`Your email app should open with your request ready to send. If it didn't, call us at ${B.phone}.`);
   });
 
-  /* ---------- Animated counters & reveal ---------- */
+  // Calculator hand-off: carry the estimate into the quote wizard
+  $('#est-send').addEventListener('click', () => {
+    const option = $(`input[name=service][value="${est.service.id}"]`, form);
+    if (option) option.checked = true;
+    if (!form.message.value.trim() || form.message.dataset.fromEstimate === 'true') {
+      form.message.value = est.summary + '\n\n';
+      form.message.dataset.fromEstimate = 'true';
+    }
+    if (!form.classList.contains('finished')) showStep(1, false);
+    toast('Estimate added to your quote request');
+  });
+
+  showStep(0, false);
+
+  /* ---------- Animated counters & reveal fallback ---------- */
   const countUp = (el) => {
     const target = Number(B[el.dataset.count]) || 0;
     const suffix = el.dataset.suffix || '';
@@ -485,6 +556,8 @@
     };
     requestAnimationFrame(tick);
   };
+  const scrollTimelines = window.CSS && CSS.supports('animation-timeline: view()');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
@@ -493,7 +566,11 @@
       io.unobserve(entry.target);
     });
   }, { threshold: 0.15 });
-  $$('.reveal, .count').forEach((el) => io.observe(el));
+  $$('.count').forEach((el) => io.observe(el));
+  if (!scrollTimelines && !reduceMotion) {
+    $$('.section-head, .bento > *, .why, .process li, .project, .est-form, .est-result, .rating-summary, .cta-inner, .wizard, .contact-info, .included-list li, .price-card')
+      .forEach((el) => { el.classList.add('reveal'); io.observe(el); });
+  }
 
   selectEstimateService(PAGE_SERVICE || S.services[0].id);
 })();

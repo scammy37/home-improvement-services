@@ -26,6 +26,20 @@ window.SITE = {
     siteUrl: 'https://michaelzagame.com/services/'
   },
 
+  // Short trust points shown under the hero and in the header strip.
+  // Only list things that are true for your business.
+  trustPoints: ['Licensed & insured', 'Permits handled', 'Background-checked crews', 'Upfront, itemized pricing'],
+
+  // "Why choose us" cards: [icon, title, text]. Icons: shield, calendar, dollar, broom, chat, badge.
+  highlights: [
+    ['shield', 'Workmanship warranty', 'Every project is backed by our written multi-year warranty, on top of manufacturer coverage.'],
+    ['dollar', 'Upfront, itemized pricing', 'You see exactly what you are paying for before we start. No surprise change orders.'],
+    ['chat', 'One point of contact', 'A dedicated project manager keeps you updated with photos and progress every day.'],
+    ['calendar', 'Schedules you can trust', 'Clear start and finish dates, and we tell you early if anything changes.'],
+    ['broom', 'Clean, respectful crews', 'Floor protection, dust control and a broom-clean site at the end of every day.'],
+    ['badge', 'Flexible financing', 'Spread the cost with monthly payment plans for approved customers.']
+  ],
+
   // Set to false once the reviews below are replaced with real customer reviews.
   // Publishing made-up reviews as genuine is illegal in many places (e.g. the US FTC rule on fake reviews).
   showSampleReviewNotice: true,
@@ -34,7 +48,7 @@ window.SITE = {
   // These are rough ballpark ranges — tune them to your local market.
   services: [
     {
-      id: 'decks', name: 'Decks & Patios', icon: 'deck', category: 'outdoor',
+      id: 'decks', featured: true, name: 'Decks & Patios', icon: 'deck', category: 'outdoor',
       blurb: 'Custom decks, patios, pergolas and railings built to last decades — plus repairs and refinishing.',
       bullets: ['Composite & wood decks', 'Pergolas & covered patios', 'Repairs, staining & sealing'],
       unit: 'sq ft of deck', defaultQty: 300, min: 50, max: 2000, step: 10,
@@ -67,7 +81,7 @@ window.SITE = {
       addons: [['Pressure washing', 300, 600], ['Wood rot repair', 500, 2000], ['Shutters & doors', 300, 800]]
     },
     {
-      id: 'kitchen', name: 'Kitchen Remodeling', icon: 'kitchen', category: 'remodeling',
+      id: 'kitchen', featured: true, name: 'Kitchen Remodeling', icon: 'kitchen', category: 'remodeling',
       blurb: 'From cabinet refreshes to full gut remodels — kitchens designed around how you live.',
       bullets: ['Cabinets & countertops', 'Islands & layout changes', 'Tile backsplashes'],
       unit: 'sq ft of kitchen', defaultQty: 150, min: 50, max: 600, step: 5,
@@ -76,7 +90,7 @@ window.SITE = {
       addons: [['Kitchen island', 3000, 10000], ['New appliances', 5000, 15000], ['Layout change', 5000, 15000]]
     },
     {
-      id: 'bathroom', name: 'Bathroom Remodeling', icon: 'bath', category: 'remodeling',
+      id: 'bathroom', featured: true, name: 'Bathroom Remodeling', icon: 'bath', category: 'remodeling',
       blurb: 'Spa-worthy bathrooms with walk-in showers, heated floors and smart storage.',
       bullets: ['Walk-in showers & tubs', 'Tile & vanities', 'Accessibility upgrades'],
       unit: 'sq ft of bathroom', defaultQty: 60, min: 25, max: 300, step: 5,

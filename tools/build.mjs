@@ -47,10 +47,10 @@ const block = (re, name) => {
 };
 const section = (id) => block(new RegExp(`<section[^>]*\\bid="${id}"[^>]*>[\\s\\S]*?</section>`), `section #${id}`);
 const shared = {
-  topbar: block(/<div class="topbar">[\s\S]*?\n {2}<\/div>/, 'top bar'),
+  topbar: block(/<aside class="topbar"[\s\S]*?<\/aside>/, 'top bar'),
   header: block(/<header class="site-header"[\s\S]*?<\/header>/, 'header'),
-  footer: block(/<footer class="site-footer">[\s\S]*?<\/footer>/, 'footer'),
-  mobileBar: block(/<div class="mobile-bar">[\s\S]*?<\/div>/, 'mobile bar'),
+  footer: block(/<footer class="site-footer[^"]*">[\s\S]*?<\/footer>/, 'footer'),
+  mobileBar: block(/<nav class="mobile-bar"[\s\S]*?<\/nav>/, 'mobile bar'),
   dialog: block(/<dialog id="review-dialog"[\s\S]*?<\/dialog>/, 'review dialog'),
   toast: block(/<div class="toast"[^>]*><\/div>/, 'toast'),
   estimate: section('estimate'),
@@ -58,7 +58,8 @@ const shared = {
   reviews: section('reviews'),
   cta: block(/<section class="cta-banner">[\s\S]*?<\/section>/, 'CTA banner'),
   faq: section('faq'),
-  contact: section('contact')
+  contact: section('contact'),
+  why: section('why')
 };
 
 // Fill in business details so pages read correctly before (or without) JavaScript.
@@ -113,11 +114,10 @@ const head = ({ title, description, path, extra = '' }) => `<!doctype html>
   <meta name="description" content="${esc(description)}">
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(description)}">
-  <meta name="theme-color" content="#315c49">${siteUrl ? `\n  <link rel="canonical" href="${siteUrl}${path}">` : ''}
+  <meta name="theme-color" content="#16302a">${siteUrl ? `\n  <link rel="canonical" href="${siteUrl}${path}">` : ''}
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 3 14h4v14h18V14h4z' fill='%23315c49'/%3E%3Crect x='13' y='18' width='6' height='10' fill='%23dd7656'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="../fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../css/styles.css">${extra}
 </head>`;
 
@@ -131,6 +131,8 @@ function servicePage(s) {
     ? `<img src="../${esc(d.photo)}" alt="${esc(s.name)} by ${esc(B.name)}">`
     : ART.scene(project ? project.scene : fallbackScene[s.id] || 'room', true);
   const firstTier = Object.values(s.tiers)[0];
+  const words = s.name.split(' ');
+  const titleHtml = words.length > 1 ? `${esc(words.slice(0, -1).join(' '))} <em>${esc(words.at(-1))}</em>` : esc(s.name);
   const serviceLd = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -144,22 +146,21 @@ function servicePage(s) {
 
   const main = `
     <section class="svc-hero">
-      <div class="hero-bg" aria-hidden="true"></div>
       <div class="container svc-hero-inner">
         <div class="svc-hero-copy">
           <nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">/</span><a href="../index.html#services">Services</a><span aria-hidden="true">/</span><span aria-current="page">${esc(s.name)}</span></nav>
           <p class="eyebrow">${esc(categoryLabel[s.category] || 'Services')} · ${esc(B.serviceArea[0])} &amp; nearby</p>
-          <h1>${esc(s.name)}</h1>
+          <h1>${titleHtml}</h1>
           <p class="lead">${esc(d.intro || s.blurb)}</p>
           <ul class="hero-points">${s.bullets.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>
           <div class="hero-actions">
-            <a class="btn btn-accent btn-lg" href="#estimate">Estimate my project</a>
-            <a class="btn btn-ghost btn-lg" data-bind-href="tel" href="#"><span>Call <span data-bind="phone"></span></span></a>
+            <a class="btn btn-accent btn-lg" href="#contact">Get my free quote <span aria-hidden="true">→</span></a>
+            <a class="text-link" href="#estimate">Estimate the cost</a>
           </div>
         </div>
         <div class="svc-media">
           ${media}
-          <div class="svc-badge"><span class="service-icon">${ART.icon(s.icon)}</span><div><strong>From ${money(firstTier[0])}/${unitShort(s)}</strong><small>Free on-site quote</small></div></div>
+          <div class="svc-badge"><span class="svc-icon">${ART.icon(s.icon)}</span><div><strong>From ${money(firstTier[0])}/${unitShort(s)}</strong><small>Free on-site quote</small></div></div>
         </div>
       </div>
     </section>
@@ -168,7 +169,7 @@ function servicePage(s) {
       <div class="container included-layout">
         <div>
           <p class="eyebrow">What's included</p>
-          <h2>Everything handled, start to finish</h2>
+          <h2>Everything <em>handled</em>, start to finish</h2>
           <ul class="included-list">${(d.included || s.bullets).map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
         </div>
         <aside class="price-card">
@@ -183,9 +184,11 @@ function servicePage(s) {
       </div>
     </section>
 
-    ${shared.estimate}
+    ${shared.why}
 
     ${shared.projects}
+
+    ${shared.estimate}
 
     ${shared.reviews}
 
@@ -199,9 +202,9 @@ function servicePage(s) {
       <div class="container">
         <div class="section-head">
           <p class="eyebrow">More services</p>
-          <h2>Explore our other services</h2>
+          <h2>Explore our other <em>services</em></h2>
         </div>
-        <div class="service-grid" id="service-grid"></div>
+        <div class="bento" id="service-grid"></div>
       </div>
     </section>`;
 
@@ -211,7 +214,7 @@ function servicePage(s) {
     path: `${s.id}/`,
     extra: `\n  ${ldScript(serviceLd).replace(/\n/g, '\n  ')}`
   })}
-<body data-service="${s.id}" data-base="../">
+<body class="svc-page" data-service="${s.id}" data-base="../">
   <!-- Generated by tools/build.mjs from js/data.js and index.html. Edit those, then re-run the build. -->
   <a class="skip-link" href="#main">Skip to content</a>
 
@@ -263,7 +266,8 @@ write('404.html', fillBindings(`<!doctype html>
   <title>Page not found | ${esc(B.name)}</title>
   <meta name="robots" content="noindex">
   <base href="${basePath}">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
