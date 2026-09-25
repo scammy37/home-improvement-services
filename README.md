@@ -8,18 +8,20 @@ It's plain HTML, CSS and JavaScript. Open `index.html` in a browser, or host the
 
 ## Features
 
-- **Hero with a quick-quote picker** that jumps into the estimator with the chosen service already selected
-- **Trust bar** with animated counters (years in business, projects, rating, warranty)
-- **11 services** with category filters, each with a starting price and an "Estimate →" shortcut
+- **Hero** with one clear call to action, star rating, a project collage and a trust strip (licensed, insured, warranty…)
+- **Stats band** with animated counters (years in business, projects, rating, warranty)
+- **11 services in a bento grid**, with large featured cards for the most popular ones and a starting price on each
+- **"Why choose us"** section: warranty, upfront pricing, one point of contact, schedules, clean crews, financing
 - **Estimate calculator** with service, size slider, quality tier, add-ons and a site-condition setting. It shows a live price range, a line-by-line breakdown and an illustrative monthly financing figure, and can copy the estimate into the contact form.
-- **Before/after gallery** with draggable comparison sliders
+- **Before/after gallery** with draggable comparison sliders and filter chips by service
 - **Reviews** with an average rating, star breakdown (click a bar to filter), filter by service, sort, "show more" and a "Write a review" dialog (saved in the visitor's browser for preview)
 - **FAQ** accordion and a list of the areas you serve
-- **Contact form** with validation and spam protection. It sends through Formspree when configured, and otherwise opens the visitor's email app.
+- **4-step quote wizard** (project → details → location → contact) with a progress bar. Multi-step forms convert far better than one long form on phones, and contact details come last. It sends through Formspree when configured, and otherwise opens the visitor's email app.
 - **A page for each service** at clean addresses like `/services/decks/` and `/services/kitchen/`, with its own intro, what's included, a pricing table, a timeline, an estimator already set to that service, matching projects and reviews, service-specific FAQs and links to the other services
 - **Real photo support** for the gallery and service pages; the built-in illustrations show until you add photos (see `images/README.md`)
 - **SEO basics:** business and service structured data (JSON-LD), canonical links, `sitemap.xml`, `robots.txt` and a custom 404 page
-- Sticky header, mobile menu, mobile call/estimate/quote bar, SEO meta tags and support for reduced-motion settings
+- Self-hosted fonts (Instrument Serif and Inter), CSS scroll animations with a fallback, and zero violations in an axe-core accessibility audit
+- Sticky header with a reading-progress line, mobile menu, mobile call/estimate/quote bar, SEO meta tags and support for reduced-motion settings
 
 ## Make it yours
 
@@ -33,6 +35,8 @@ Everything you'd normally change lives in **`js/data.js`**:
 | Customer reviews | `reviews` |
 | Gallery projects | `projects` |
 | Service page text, what's included, timeline, FAQs, header photo | `serviceDetails` |
+| Trust points under the hero, "why choose us" cards | `trustPoints`, `highlights` |
+| Which services get the big featured cards | `featured: true` on a service |
 | Process steps and FAQs | `process`, `faqs` |
 | Your live site address (sitemap and canonical links) | `business.siteUrl` |
 
@@ -73,6 +77,7 @@ index.html                 home page
 404.html, sitemap.xml,
 robots.txt                 generated
 css/styles.css             all styles
+fonts/                     self-hosted web fonts and their licenses
 js/data.js                 content and configuration (edit this)
 js/scenes.js               service icons and before/after illustrations
 js/main.js                 interactivity for every page

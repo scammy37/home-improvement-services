@@ -7,11 +7,10 @@
   <meta name="description" content="Decks, interior & exterior painting, kitchen and bathroom remodeling, flooring, roofing, siding and more. Get an instant estimate and a free consultation.">
   <meta property="og:title" content="Home Improvement Services">
   <meta property="og:description" content="Decks, painting, remodeling & more — get an instant estimate.">
-  <meta name="theme-color" content="#315c49">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 3 14h4v14h18V14h4z' fill='%23315c49'/%3E%3Crect x='13' y='18' width='6' height='10' fill='%23dd7656'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#16302a">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2316302a'/%3E%3Cpath d='M16 7 7 14.5h2.6V25h12.8V14.5H25z' fill='%23f7f3ec'/%3E%3Crect x='14' y='18' width='4' height='7' fill='%23c8643f'/%3E%3C/svg%3E">
+  <link rel="preload" href="fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/styles.css">
   <!-- build:jsonld -->
   <link rel="canonical" href="https://michaelzagame.com/services/">
@@ -148,36 +147,35 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <div class="topbar">
+  <aside class="topbar" aria-label="Business information">
     <div class="container topbar-inner">
-      <span data-bind="hours"></span>
+      <span class="topbar-rating"><span class="stars" aria-hidden="true">★★★★★</span> <span data-rating-text>Rated 5.0 by homeowners</span></span>
       <span class="topbar-right">
         <span data-bind="license"></span>
-        <span aria-hidden="true">·</span>
-        <span>Free in-home consultations</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span data-bind="hours"></span>
       </span>
     </div>
-  </div>
+  </aside>
 
   <header class="site-header" id="top">
     <div class="container header-inner">
       <a class="brand" href="#top" aria-label="Home">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 32 32"><path d="M16 3 3 14h4v14h18V14h4z"/><rect x="13" y="18" width="6" height="10"/></svg>
+          <svg viewBox="0 0 32 32"><path d="M16 5 5 14.2h3V26h16V14.2h3z"/><rect x="14" y="18.5" width="4" height="7.5"/></svg>
         </span>
         <span class="brand-name" data-bind="name"></span>
       </a>
       <nav class="main-nav" id="main-nav" aria-label="Main">
         <a href="#services">Services</a>
-        <a href="#estimate">Estimate</a>
         <a href="#projects">Projects</a>
+        <a href="#estimate">Cost calculator</a>
         <a href="#reviews">Reviews</a>
         <a href="#faq">FAQ</a>
-        <a href="#contact">Contact</a>
       </nav>
       <div class="header-cta">
         <a class="phone-link" data-bind-href="tel" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg><span data-bind="phone"></span></a>
-        <a class="btn btn-accent" href="#contact">Free Quote</a>
+        <a class="btn btn-accent" href="#contact">Free quote</a>
         <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu">
           <span></span><span></span><span></span>
         </button>
@@ -188,81 +186,102 @@
   <main id="main">
     <!-- HERO -->
     <section class="hero">
-      <div class="hero-bg" aria-hidden="true"></div>
       <div class="container hero-inner">
-        <div class="hero-copy reveal">
-          <p class="eyebrow"><span class="stars" aria-hidden="true">★★★★★</span> <span id="hero-rating"></span></p>
-          <h1>Your home, <em>better</em> than you imagined.</h1>
-          <p class="lead" data-bind="tagline"></p>
-          <ul class="hero-points">
-            <li>Licensed &amp; insured</li>
-            <li><span><span data-bind="warrantyYears"></span>-year workmanship warranty</span></li>
-            <li>Upfront, itemized pricing</li>
-          </ul>
+        <div class="hero-copy">
+          <p class="kicker"><span class="pulse" aria-hidden="true"></span><span>Now booking projects in <span data-area-first></span> &amp; nearby</span></p>
+          <h1>Better homes,<br><em>built with care.</em></h1>
+          <p class="lead">Decks, painting, kitchens, baths and everything in between. One trusted local team, upfront pricing, and a <span data-bind="warrantyYears"></span>-year workmanship warranty on every job.</p>
           <div class="hero-actions">
-            <a class="btn btn-accent btn-lg" href="#estimate">Get an instant estimate</a>
-            <a class="btn btn-ghost btn-lg" href="#projects">See our work</a>
+            <a class="btn btn-accent btn-lg" href="#contact">Get my free quote <span aria-hidden="true">→</span></a>
+            <a class="text-link" href="#estimate">Or check prices in 30 seconds</a>
+          </div>
+          <div class="hero-proof">
+            <div class="avatars" aria-hidden="true"><span>JM</span><span>RT</span><span>PS</span><span>DW</span></div>
+            <p><strong><span class="stars" aria-hidden="true">★★★★★</span> <span id="hero-rating">5.0</span></strong><span id="hero-rating-count">from homeowners like you</span></p>
           </div>
         </div>
+        <div class="hero-visual" id="hero-visual" aria-hidden="true"></div>
+      </div>
 
-        <form class="quick-quote reveal" id="quick-quote" aria-labelledby="qq-title">
-          <h2 id="qq-title">What can we build for you?</h2>
-          <p class="muted">Pick a service to start your free estimate.</p>
-          <div class="qq-grid" id="qq-services" role="radiogroup" aria-label="Service"></div>
-          <label class="field">
-            <span>ZIP code</span>
-            <input type="text" name="zip" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="e.g. 90210">
-          </label>
-          <button class="btn btn-primary btn-block" type="submit">Start my estimate →</button>
-          <p class="fine">No obligation · Takes 30 seconds</p>
-        </form>
+      <div class="container">
+        <ul class="trust-strip" id="trust-strip" aria-label="Why homeowners trust us"></ul>
       </div>
     </section>
 
-    <!-- TRUST BAR -->
-    <section class="trust" aria-label="Why homeowners trust us">
-      <div class="container trust-inner">
-        <div class="stat"><strong class="count" data-count="yearsInBusiness">0</strong><span>Years in business</span></div>
+    <!-- STATS -->
+    <section class="stats" aria-label="By the numbers">
+      <div class="container stats-inner">
+        <div class="stat"><strong class="count" data-count="yearsInBusiness">0</strong><span>Years serving the area</span></div>
         <div class="stat"><strong class="count" data-count="projectsCompleted" data-suffix="+">0</strong><span>Projects completed</span></div>
-        <div class="stat"><strong id="stat-rating">5.0</strong><span>Average rating</span></div>
-        <div class="stat"><strong class="count" data-count="warrantyYears" data-suffix="-yr">0</strong><span>Warranty</span></div>
+        <div class="stat"><strong id="stat-rating">5.0</strong><span>Average review rating</span></div>
+        <div class="stat"><strong class="count" data-count="warrantyYears" data-suffix=" yr">0</strong><span>Workmanship warranty</span></div>
       </div>
     </section>
 
     <!-- SERVICES -->
     <section class="section" id="services">
       <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Our services</p>
-          <h2>One trusted team for every project</h2>
-          <p class="lead">From weekend fixes to whole-home transformations, our crews handle it all — so you only need one call.</p>
+        <div class="section-head split">
+          <div>
+            <p class="eyebrow">What we do</p>
+            <h2>One team for <em>every</em> project</h2>
+          </div>
+          <p class="lead">From a weekend repair to a whole-home transformation, our own crews handle it — so you only ever need one call.</p>
         </div>
-        <div class="filters" id="service-filters" role="tablist" aria-label="Filter services"></div>
-        <div class="service-grid" id="service-grid"></div>
+        <div class="bento" id="service-grid"></div>
+      </div>
+    </section>
+
+    <!-- WHY US -->
+    <section class="section section-dark grain" id="why">
+      <div class="container">
+        <div class="section-head split">
+          <div>
+            <p class="eyebrow">Why homeowners choose us</p>
+            <h2>The contractor you <em>wish</em> you'd hired last time</h2>
+          </div>
+          <p class="lead">Most remodeling horror stories come down to poor communication and surprise costs. We built our whole process to prevent both.</p>
+        </div>
+        <div class="why-grid" id="why-grid"></div>
       </div>
     </section>
 
     <!-- PROCESS -->
-    <section class="section section-dark" id="process">
+    <section class="section" id="process">
       <div class="container">
-        <div class="section-head reveal">
+        <div class="section-head">
           <p class="eyebrow">How it works</p>
-          <h2>A simple, stress-free process</h2>
+          <h2>Four steps to a <em>better</em> home</h2>
         </div>
         <ol class="process" id="process-list"></ol>
+      </div>
+    </section>
+
+    <!-- PROJECTS / BEFORE-AFTER -->
+    <section class="section section-tint" id="projects">
+      <div class="container">
+        <div class="section-head split">
+          <div>
+            <p class="eyebrow">Recent projects</p>
+            <h2>See the <em>transformation</em></h2>
+          </div>
+          <p class="lead">Drag the handle on any project to compare before and after.</p>
+        </div>
+        <div class="chip-row" id="project-filters" role="toolbar" aria-label="Filter projects"></div>
+        <div class="project-grid" id="project-grid"></div>
       </div>
     </section>
 
     <!-- ESTIMATE CALCULATOR -->
     <section class="section" id="estimate">
       <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Estimate calculator</p>
-          <h2>See what your project could cost</h2>
-          <p class="lead">Adjust the details below for an instant ballpark. Your exact price comes after a free on-site visit.</p>
+        <div class="section-head">
+          <p class="eyebrow">Cost calculator</p>
+          <h2>What will my project <em>cost?</em></h2>
+          <p class="lead">Adjust the details for an instant ballpark based on typical local projects. Your exact price comes after a free on-site visit.</p>
         </div>
 
-        <div class="estimator reveal">
+        <div class="estimator">
           <div class="est-form">
             <div class="est-step">
               <span class="step-num">1</span>
@@ -312,42 +331,30 @@
             </div>
           </div>
 
-          <aside class="est-result" aria-live="polite">
+          <aside class="est-result grain" aria-live="polite">
             <p class="eyebrow">Estimated investment</p>
             <p class="est-range"><span id="est-low">$0</span><span class="dash">–</span><span id="est-high">$0</span></p>
             <div class="est-bar" aria-hidden="true"><span id="est-bar-fill"></span></div>
             <dl class="est-breakdown" id="est-breakdown"></dl>
             <p class="est-monthly">Financing from <strong id="est-monthly">$0</strong>/mo*</p>
-            <a class="btn btn-accent btn-block" href="#contact" id="est-send">Lock in a free on-site quote</a>
+            <a class="btn btn-accent btn-block" href="#contact" id="est-send">Turn this into a free quote <span aria-hidden="true">→</span></a>
             <p class="fine">*Illustrative: 10-year term at 8.99% APR on the midpoint, for approved buyers. Ballpark ranges only — not a binding quote.</p>
           </aside>
         </div>
       </div>
     </section>
 
-    <!-- PROJECTS / BEFORE-AFTER -->
-    <section class="section section-tint" id="projects">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Recent projects</p>
-          <h2>Before &amp; after</h2>
-          <p class="lead">Drag the slider to see the transformation.</p>
-        </div>
-        <div class="project-grid" id="project-grid"></div>
-      </div>
-    </section>
-
     <!-- REVIEWS -->
-    <section class="section" id="reviews">
+    <section class="section section-tint" id="reviews">
       <div class="container">
-        <div class="section-head reveal">
+        <div class="section-head">
           <p class="eyebrow">Reviews</p>
-          <h2>Homeowners love working with us</h2>
+          <h2>Homeowners <em>love</em> working with us</h2>
         </div>
         <p class="sample-notice" id="sample-notice" hidden>Sample reviews shown for layout — replace with real customer reviews before launch.</p>
 
         <div class="reviews-layout">
-          <aside class="rating-summary reveal">
+          <aside class="rating-summary">
             <p class="big-rating" id="avg-rating">5.0</p>
             <p class="stars stars-lg" id="avg-stars" aria-hidden="true"></p>
             <p class="muted" id="review-count"></p>
@@ -379,14 +386,17 @@
 
     <!-- CTA BANNER -->
     <section class="cta-banner">
-      <div class="container cta-inner">
-        <div>
-          <h2>Ready to start your project?</h2>
-          <p>Book a free, no-pressure consultation today.</p>
-        </div>
-        <div class="cta-actions">
-          <a class="btn btn-light btn-lg" href="#contact">Request a quote</a>
-          <a class="btn btn-outline-light btn-lg" data-bind-href="tel" href="#"><span>Call <span data-bind="phone"></span></span></a>
+      <div class="container">
+        <div class="cta-inner grain">
+          <div>
+            <p class="eyebrow">Free, no-pressure consultation</p>
+            <h2>Ready to love your home <em>again?</em></h2>
+            <p>Tell us about your project and get a clear, itemized quote — usually within 48 hours of your visit.</p>
+          </div>
+          <div class="cta-actions">
+            <a class="btn btn-accent btn-lg" href="#contact">Start my quote <span aria-hidden="true">→</span></a>
+            <a class="btn btn-outline-light btn-lg" data-bind-href="tel" href="#"><span>Call <span data-bind="phone"></span></span></a>
+          </div>
         </div>
       </div>
     </section>
@@ -394,10 +404,10 @@
     <!-- FAQ -->
     <section class="section" id="faq">
       <div class="container faq-layout">
-        <div class="section-head left reveal">
+        <div class="faq-aside">
           <p class="eyebrow">FAQ</p>
-          <h2>Questions, answered</h2>
-          <p class="lead">Can't find what you're looking for? <a href="#contact">Send us a message</a>.</p>
+          <h2>Questions, <em>answered</em></h2>
+          <p class="lead">Can't find what you're looking for? <a href="#contact">Send us a message</a> or call <a data-bind-href="tel" href="#"><span data-bind="phone"></span></a>.</p>
           <div class="area-card">
             <h3>Areas we serve</h3>
             <ul class="chips" id="area-list"></ul>
@@ -407,65 +417,125 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
+    <!-- CONTACT / QUOTE WIZARD -->
     <section class="section section-tint" id="contact">
       <div class="container contact-layout">
-        <div class="contact-info reveal">
-          <p class="eyebrow">Contact us</p>
-          <h2>Let's talk about your project</h2>
-          <p class="lead">Tell us what you have in mind. We reply within one business day — usually much sooner.</p>
-          <ul class="contact-list">
-            <li><span class="ci-icon">☎</span><div><strong>Phone</strong><a data-bind-href="tel" href="#"><span data-bind="phone"></span></a></div></li>
-            <li><span class="ci-icon">✉</span><div><strong>Email</strong><a data-bind-href="mailto" href="#"><span data-bind="email"></span></a></div></li>
-            <li><span class="ci-icon">⌂</span><div><strong>Office</strong><span data-bind="address"></span></div></li>
-            <li><span class="ci-icon">◷</span><div><strong>Hours</strong><span data-bind="hours"></span></div></li>
-          </ul>
+        <div class="contact-info">
+          <p class="eyebrow">Free quote</p>
+          <h2>Let's talk about your <em>project</em></h2>
+          <p class="lead">Four quick steps. We reply within one business day — usually much sooner.</p>
         </div>
 
-        <form class="contact-form reveal" id="contact-form" novalidate>
-          <div class="form-grid">
-            <label class="field"><span>Full name *</span><input name="name" required autocomplete="name"></label>
-            <label class="field"><span>Phone *</span><input name="phone" type="tel" required autocomplete="tel"></label>
-            <label class="field"><span>Email *</span><input name="email" type="email" required autocomplete="email"></label>
-            <label class="field"><span>ZIP code</span><input name="zip" inputmode="numeric" maxlength="5" autocomplete="postal-code"></label>
-            <label class="field span-2"><span>Service needed *</span><select name="service" id="contact-service" required></select></label>
-            <label class="field"><span>Budget</span>
-              <select name="budget">
-                <option value="">Not sure yet</option>
-                <option>Under $5,000</option>
-                <option>$5,000 – $15,000</option>
-                <option>$15,000 – $50,000</option>
-                <option>$50,000 – $100,000</option>
-                <option>$100,000+</option>
-              </select>
-            </label>
-            <label class="field"><span>Timeline</span>
-              <select name="timeline">
-                <option>As soon as possible</option>
-                <option>Within 1–3 months</option>
-                <option>3–6 months</option>
-                <option>Just planning</option>
-              </select>
-            </label>
-            <label class="field span-2"><span>Project details *</span><textarea name="message" rows="5" required placeholder="Size, materials, goals, anything we should know…"></textarea></label>
-            <label class="field span-2 check"><input type="checkbox" name="consent" required><span>I agree to be contacted about my project by phone, text or email. *</span></label>
-            <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <form class="wizard" id="contact-form" novalidate>
+          <div class="wizard-progress" aria-hidden="true">
+            <div class="wizard-bar"><span id="wizard-bar-fill"></span></div>
+            <ol class="wizard-labels" id="wizard-labels">
+              <li>Project</li><li>Details</li><li>Location</li><li>Contact</li>
+            </ol>
           </div>
-          <button class="btn btn-accent btn-block btn-lg" type="submit">Request my free quote</button>
+          <p class="sr-only" id="wizard-status" aria-live="polite"></p>
+
+          <fieldset class="wizard-step" data-step="0">
+            <legend>What can we help you with?</legend>
+            <div class="option-grid" id="wizard-services"></div>
+          </fieldset>
+
+          <fieldset class="wizard-step" data-step="1" hidden>
+            <legend>Tell us a little more</legend>
+            <div class="field">
+              <span>When would you like to start?</span>
+              <div class="pill-group" role="radiogroup" aria-label="Timeline">
+                <label><input type="radio" name="timeline" value="As soon as possible" checked><span>ASAP</span></label>
+                <label><input type="radio" name="timeline" value="Within 1–3 months"><span>1–3 months</span></label>
+                <label><input type="radio" name="timeline" value="3–6 months"><span>3–6 months</span></label>
+                <label><input type="radio" name="timeline" value="Just planning"><span>Just planning</span></label>
+              </div>
+            </div>
+            <div class="field">
+              <span>Approximate budget</span>
+              <div class="pill-group" role="radiogroup" aria-label="Budget">
+                <label><input type="radio" name="budget" value="Not sure yet" checked><span>Not sure</span></label>
+                <label><input type="radio" name="budget" value="Under $5,000"><span>&lt; $5k</span></label>
+                <label><input type="radio" name="budget" value="$5,000 – $15,000"><span>$5–15k</span></label>
+                <label><input type="radio" name="budget" value="$15,000 – $50,000"><span>$15–50k</span></label>
+                <label><input type="radio" name="budget" value="$50,000+"><span>$50k+</span></label>
+              </div>
+            </div>
+            <label class="field"><span>Project details <small>(optional)</small></span><textarea name="message" rows="4" placeholder="Size, materials, goals, anything we should know…"></textarea></label>
+          </fieldset>
+
+          <fieldset class="wizard-step" data-step="2" hidden>
+            <legend>Where is the project?</legend>
+            <label class="field"><span>ZIP code *</span><input name="zip" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" autocomplete="postal-code" required placeholder="5-digit ZIP"></label>
+            <div class="field">
+              <span>Property type</span>
+              <div class="pill-group" role="radiogroup" aria-label="Property type">
+                <label><input type="radio" name="property" value="House" checked><span>House</span></label>
+                <label><input type="radio" name="property" value="Townhome"><span>Townhome</span></label>
+                <label><input type="radio" name="property" value="Condo"><span>Condo</span></label>
+                <label><input type="radio" name="property" value="Business"><span>Business</span></label>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="wizard-step" data-step="3" hidden>
+            <legend>Where should we send your quote?</legend>
+            <div class="form-grid">
+              <label class="field span-2"><span>Full name *</span><input name="name" required autocomplete="name"></label>
+              <label class="field"><span>Phone *</span><input name="phone" type="tel" required autocomplete="tel"></label>
+              <label class="field"><span>Email *</span><input name="email" type="email" required autocomplete="email"></label>
+            </div>
+            <div class="field">
+              <span>Best way to reach you</span>
+              <div class="pill-group" role="radiogroup" aria-label="Preferred contact">
+                <label><input type="radio" name="contactPref" value="Call" checked><span>Call</span></label>
+                <label><input type="radio" name="contactPref" value="Text"><span>Text</span></label>
+                <label><input type="radio" name="contactPref" value="Email"><span>Email</span></label>
+              </div>
+            </div>
+            <label class="field check"><input type="checkbox" name="consent" required><span>I agree to be contacted about my project by phone, text or email. *</span></label>
+            <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          </fieldset>
+
+          <div class="wizard-done" id="wizard-done" hidden tabindex="-1">
+            <span class="done-icon" aria-hidden="true">✓</span>
+            <h3>Thanks — your request is in!</h3>
+            <p id="wizard-done-text">We'll be in touch within one business day.</p>
+          </div>
+
+          <div class="wizard-nav" id="wizard-nav">
+            <button type="button" class="btn btn-ghost" id="wizard-back" hidden>← Back</button>
+            <button type="submit" class="btn btn-accent btn-lg" id="wizard-next">Continue <span aria-hidden="true">→</span></button>
+          </div>
           <p class="form-status" id="form-status" role="status"></p>
+          <p class="fine wizard-fine">🔒 Your details are only used to prepare your quote. No spam, ever.</p>
         </form>
+
+        <div class="contact-extra">
+            <ol class="next-steps">
+              <li><span><strong>We call you</strong> to talk through your ideas and budget.</span></li>
+              <li><span><strong>We visit</strong> to measure and see the space. Free, no obligation.</span></li>
+              <li><span><strong>You get a quote</strong> that's clear and itemized, with options.</span></li>
+            </ol>
+            <ul class="contact-list">
+              <li><span class="ci-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></span><div><strong>Phone</strong><a data-bind-href="tel" href="#"><span data-bind="phone"></span></a></div></li>
+              <li><span class="ci-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="m3 6 9 7 9-7" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><div><strong>Email</strong><a data-bind-href="mailto" href="#"><span data-bind="email"></span></a></div></li>
+              <li><span class="ci-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span><div><strong>Office</strong><span data-bind="address"></span></div></li>
+            </ul>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer grain">
     <div class="container footer-grid">
-      <div>
+      <div class="footer-brand">
         <a class="brand brand-light" href="#top">
-          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 3 3 14h4v14h18V14h4z"/><rect x="13" y="18" width="6" height="10"/></svg></span>
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 5 5 14.2h3V26h16V14.2h3z"/><rect x="14" y="18.5" width="4" height="7.5"/></svg></span>
           <span class="brand-name" data-bind="name"></span>
         </a>
         <p class="footer-tag" data-bind="tagline"></p>
+        <a class="btn btn-accent" href="#contact">Get a free quote</a>
       </div>
       <div>
         <h3>Services</h3>
@@ -474,11 +544,11 @@
       <div>
         <h3>Company</h3>
         <ul>
+          <li><a href="#why">Why choose us</a></li>
           <li><a href="#process">How it works</a></li>
           <li><a href="#projects">Projects</a></li>
           <li><a href="#reviews">Reviews</a></li>
           <li><a href="#faq">FAQ</a></li>
-          <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
       <div>
@@ -487,6 +557,7 @@
           <li><a data-bind-href="tel" href="#"><span data-bind="phone"></span></a></li>
           <li><a data-bind-href="mailto" href="#"><span data-bind="email"></span></a></li>
           <li><span data-bind="address"></span></li>
+          <li><span data-bind="hours"></span></li>
         </ul>
       </div>
     </div>
@@ -497,11 +568,11 @@
   </footer>
 
   <!-- Mobile sticky action bar -->
-  <div class="mobile-bar">
-    <a data-bind-href="tel" href="#">Call now</a>
-    <a href="#estimate">Estimate</a>
+  <nav class="mobile-bar" aria-label="Quick actions">
+    <a data-bind-href="tel" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>Call</a>
+    <a href="#estimate">Prices</a>
     <a class="accent" href="#contact">Free quote</a>
-  </div>
+  </nav>
 
   <!-- Review modal -->
   <dialog id="review-dialog" aria-labelledby="rd-title">
