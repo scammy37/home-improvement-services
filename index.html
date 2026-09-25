@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Home Improvement Services is coming soon.">
+  <title>Home Improvement Services | Coming Soon</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18221f;
+      --muted: #5d6962;
+      --paper: #f4f0e8;
+      --cream: #fffdf8;
+      --sage: #b9c8ae;
+      --fern: #315c49;
+      --coral: #dd7656;
+      --line: rgba(24, 34, 31, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .page::before,
+    .page::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .page::before {
+      width: 42rem;
+      height: 42rem;
+      right: -15rem;
+      top: -18rem;
+      background: var(--sage);
+      opacity: 0.62;
+    }
+
+    .page::after {
+      width: 20rem;
+      height: 20rem;
+      left: -9rem;
+      bottom: -8rem;
+      border: 1px solid var(--coral);
+      opacity: 0.45;
+    }
+
+    header,
+    main,
+    footer { position: relative; z-index: 1; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem clamp(1.5rem, 6vw, 6rem);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 1.05rem;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .mark {
+      width: 2rem;
+      height: 2rem;
+      display: grid;
+      place-items: center;
+      color: var(--cream);
+      background: var(--fern);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+    }
+
+    .mark span { transform: rotate(45deg); font-size: 0.9rem; }
+
+    .status {
+      color: var(--fern);
+      font: 700 0.72rem/1.2 Arial, sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    main {
+      display: grid;
+      place-items: center;
+      padding: 5rem clamp(1.5rem, 8vw, 9rem);
+    }
+
+    .content {
+      width: min(100%, 74rem);
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
+      gap: clamp(3rem, 9vw, 9rem);
+      align-items: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 1.5rem;
+      color: var(--coral);
+      font: 700 0.78rem/1.2 Arial, sans-serif;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 10ch;
+      margin: 0;
+      font-size: clamp(4rem, 9vw, 8.5rem);
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      font-weight: 500;
+    }
+
+    .intro {
+      max-width: 32rem;
+      margin: 2rem 0 0;
+      color: var(--muted);
+      font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+      line-height: 1.55;
+    }
+
+    .note {
+      padding: 2rem;
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 1.2rem 1.2rem 1.2rem 0;
+      box-shadow: 0.8rem 0.8rem 0 var(--sage);
+    }
+
+    .note-label {
+      margin: 0 0 1.5rem;
+      color: var(--fern);
+      font: 700 0.72rem/1.2 Arial, sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .note p {
+      margin: 0;
+      font-size: 1.55rem;
+      line-height: 1.15;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.5rem clamp(1.5rem, 6vw, 6rem);
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font: 0.72rem/1.4 Arial, sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 700px) {
+      header { padding-top: 1.4rem; padding-bottom: 1.4rem; }
+      .status { display: none; }
+      main { padding-top: 4rem; padding-bottom: 4rem; }
+      .content { grid-template-columns: 1fr; gap: 3.5rem; }
+      h1 { font-size: clamp(4rem, 19vw, 6.5rem); }
+      .note { max-width: 22rem; }
+      footer { flex-direction: column; gap: 0.35rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand"><span class="mark"><span>+</span></span> Home Improvement Services</div>
+      <div class="status">A better home is on the way</div>
+    </header>
+
+    <main>
+      <div class="content">
+        <section>
+          <p class="eyebrow">Coming soon</p>
+          <h1>Make room for better.</h1>
+          <p class="intro">Thoughtful repairs, trusted craftsmanship, and the small improvements that make home feel more like yours.</p>
+        </section>
+
+        <aside class="note">
+          <p class="note-label">We're getting ready</p>
+          <p>Our new home improvement service is taking shape. Check back soon to see what we can build together.</p>
+        </aside>
+      </div>
+    </main>
+
+    <footer>
+      <span>Home Improvement Services</span>
+      <span>Coming soon · 2026</span>
+    </footer>
+  </div>
+</body>
+</html>
