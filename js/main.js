@@ -8,6 +8,12 @@
   const esc = (str) => String(str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const serviceById = (id) => S.services.find((s) => s.id === id);
 
+  // Service pages set data-service (the service shown) and data-base (path back to the site root).
+  const PAGE_SERVICE = document.body.dataset.service || '';
+  const BASE = document.body.dataset.base || '';
+  const pageUrl = (id) => BASE + 'services/' + id + '.html';
+  const asset = (path) => /^(https?:)?\/\//.test(path) ? path : BASE + path;
+
   /* ---------- Business details ---------- */
   const tel = 'tel:' + B.phone.replace(/[^\d+]/g, '');
   $$('[data-bind]').forEach((el) => { el.textContent = B[el.dataset.bind] ?? ''; });
@@ -40,7 +46,11 @@
       navLinks.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
     });
   }, { rootMargin: '-45% 0px -50% 0px' });
-  navLinks.forEach((a) => { const sec = $(a.getAttribute('href')); if (sec) spy.observe(sec); });
+  navLinks.forEach((a) => {
+    const href = a.getAttribute('href');
+    const sec = href.startsWith('#') && $(href);
+    if (sec) spy.observe(sec);
+  });
 
   /* ---------- Toast ---------- */
   let toastTimer;
@@ -59,25 +69,25 @@
   const categories = [['all', 'All services'], ['outdoor', 'Outdoor'], ['painting', 'Painting'], ['remodeling', 'Remodeling'], ['interior', 'Interior'], ['exterior', 'Exterior']]
     .filter(([id]) => id === 'all' || S.services.some((s) => s.category === id));
   const filterBox = $('#service-filters');
-  filterBox.innerHTML = categories.map(([id, label], i) =>
+  if (filterBox) filterBox.innerHTML = categories.map(([id, label], i) =>
     `<button class="filter" role="tab" data-cat="${id}" aria-selected="${i === 0}">${label}</button>`).join('');
 
   function renderServices(cat) {
     $('#service-grid').innerHTML = S.services
-      .filter((s) => cat === 'all' || s.category === cat)
+      .filter((s) => s.id !== PAGE_SERVICE && (cat === 'all' || s.category === cat))
       .map((s, i) => `
         <article class="service-card" style="animation-delay:${i * 40}ms">
           <div class="service-icon">${ART.icon(s.icon)}</div>
-          <h3>${esc(s.name)}</h3>
+          <h3><a class="card-link" href="${pageUrl(s.id)}">${esc(s.name)}</a></h3>
           <p>${esc(s.blurb)}</p>
           <ul>${s.bullets.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>
           <div class="from">
             <span>From <strong>${startingPrice(s)}</strong></span>
-            <button class="link-btn" data-estimate="${s.id}">Estimate →</button>
+            <a class="link-btn" href="${pageUrl(s.id)}">Details →</a>
           </div>
         </article>`).join('');
   }
-  filterBox.addEventListener('click', (e) => {
+  filterBox?.addEventListener('click', (e) => {
     const btn = e.target.closest('.filter');
     if (!btn) return;
     $$('.filter', filterBox).forEach((b) => b.setAttribute('aria-selected', String(b === btn)));
@@ -92,12 +102,13 @@
     $('#estimate').scrollIntoView();
   });
 
-  $('#footer-services').innerHTML = S.services.map((s) => `<li><a href="#estimate" data-estimate="${s.id}">${esc(s.name)}</a></li>`).join('');
+  $('#footer-services').innerHTML = S.services.map((s) => `<li><a href="${pageUrl(s.id)}">${esc(s.name)}</a></li>`).join('');
 
-  /* ---------- Quick quote (hero) ---------- */
+  /* ---------- Quick quote (hero, home page only) ---------- */
+  const qqGrid = $('#qq-services');
+  if (qqGrid) {
   const qqServices = S.services.slice(0, 6);
   let qqChoice = qqServices[0].id;
-  const qqGrid = $('#qq-services');
   qqGrid.innerHTML = qqServices.map((s, i) =>
     `<button type="button" class="qq-option" role="radio" aria-checked="${i === 0}" data-id="${s.id}">${ART.icon(s.icon)}${esc(s.name.replace(' Remodeling', ''))}</button>`).join('');
   qqGrid.addEventListener('click', (e) => {
@@ -113,11 +124,15 @@
     selectEstimateService(qqChoice);
     $('#estimate').scrollIntoView();
   });
+  }
 
   /* ---------- Process & FAQ & areas ---------- */
-  $('#process-list').innerHTML = S.process.map(([t, d]) => `<li class="reveal"><h3>${esc(t)}</h3><p>${esc(d)}</p></li>`).join('');
-  $('#faq-list').innerHTML = S.faqs.map(([q, a], i) => `<details class="faq-item"${i === 0 ? ' open' : ''}><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('');
-  $('#area-list').innerHTML = B.serviceArea.map((a) => `<li>${esc(a)}</li>`).join('');
+  const processList = $('#process-list');
+  if (processList) processList.innerHTML = S.process.map(([t, d]) => `<li class="reveal"><h3>${esc(t)}</h3><p>${esc(d)}</p></li>`).join('');
+  const pageDetails = (S.serviceDetails || {})[PAGE_SERVICE] || {};
+  $('#faq-list').innerHTML = [...(pageDetails.faqs || []), ...S.faqs].map(([q, a], i) => `<details class="faq-item"${i === 0 ? ' open' : ''}><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('');
+  const areaList = $('#area-list');
+  if (areaList) areaList.innerHTML = B.serviceArea.map((a) => `<li>${esc(a)}</li>`).join('');
 
   /* ---------- Estimate calculator ---------- */
   const est = { service: null, qty: 0, tier: null, addons: new Set(), complexity: 1 };
@@ -221,13 +236,26 @@
   });
 
   /* ---------- Before / after gallery ---------- */
-  $('#project-grid').innerHTML = S.projects.map((p, i) => {
+  // Real photos (p.before / p.after) take priority over the built-in illustrations.
+  const baImage = (p, after) => {
+    const src = after ? p.after : p.before;
+    return src
+      ? `<img src="${esc(asset(src))}" alt="${after ? 'After' : 'Before'}: ${esc(p.title)}" loading="lazy" draggable="false">`
+      : ART.scene(p.scene, after);
+  };
+  const projects = S.projects.filter((p) => !PAGE_SERVICE || p.service === PAGE_SERVICE);
+  if (!projects.length && $('#projects')) {
+    // No projects for this service yet: drop the section and send its links to the home page gallery
+    $('#projects').remove();
+    $$('a[href="#projects"]').forEach((a) => { a.href = BASE + 'index.html#projects'; });
+  }
+  $('#project-grid') && ($('#project-grid').innerHTML = projects.map((p) => {
     const svc = serviceById(p.service);
     return `
       <article class="project reveal">
         <div class="ba">
-          <div class="before">${ART.scene(p.scene, false)}</div>
-          <div class="after">${ART.scene(p.scene, true)}</div>
+          <div class="before">${baImage(p, false)}</div>
+          <div class="after">${baImage(p, true)}</div>
           <span class="ba-label b">Before</span><span class="ba-label a">After</span>
           <div class="ba-handle"></div>
           <input type="range" min="0" max="100" value="50" aria-label="Compare before and after: ${esc(p.title)}">
@@ -238,7 +266,7 @@
           <p>${esc(p.detail)}</p>
         </div>
       </article>`;
-  }).join('');
+  }).join(''));
   $$('.ba').forEach((ba) => {
     const input = $('input', ba);
     input.addEventListener('input', () => ba.style.setProperty('--pos', input.value + '%'));
@@ -249,13 +277,14 @@
   const loadLocal = () => { try { return JSON.parse(localStorage.getItem(REVIEW_KEY)) || []; } catch { return []; } };
   const saveLocal = (list) => { try { localStorage.setItem(REVIEW_KEY, JSON.stringify(list)); } catch { /* storage unavailable */ } };
   let reviews = [...loadLocal(), ...S.reviews];
-  const reviewState = { filter: 'all', stars: 0, sort: 'new', shown: 6 };
+  const reviewState = { filter: PAGE_SERVICE || 'all', stars: 0, sort: 'new', shown: 6 };
   const avatarColors = ['#315c49', '#dd7656', '#b08d57', '#4f7a8a', '#7a5c8a', '#5a7d4f'];
   const starStr = (n) => '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n);
 
   $('#sample-notice').hidden = !S.showSampleReviewNotice;
   const serviceOpts = S.services.map((s) => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
   $('#review-filter').insertAdjacentHTML('beforeend', serviceOpts);
+  $('#review-filter').value = reviewState.filter;
   $('#review-service').innerHTML = serviceOpts;
   $('#contact-service').innerHTML = '<option value="">Select a service…</option>' + serviceOpts + '<option value="other">Something else</option>';
 
@@ -266,8 +295,10 @@
     $('#avg-rating').textContent = avgText;
     $('#avg-stars').textContent = starStr(Math.round(avg));
     $('#review-count').textContent = `Based on ${total} reviews`;
-    $('#stat-rating').textContent = avgText + '★';
-    $('#hero-rating').textContent = `Rated ${avgText}/5 by ${total}+ homeowners`;
+    const statRating = $('#stat-rating');
+    const heroRating = $('#hero-rating');
+    if (statRating) statRating.textContent = avgText + '★';
+    if (heroRating) heroRating.textContent = `Rated ${avgText}/5 by ${total}+ homeowners`;
     $('#rating-bars').innerHTML = [5, 4, 3, 2, 1].map((n) => {
       const c = reviews.filter((r) => r.rating === n).length;
       const pct = total ? (c / total) * 100 : 0;
@@ -463,5 +494,5 @@
   }, { threshold: 0.15 });
   $$('.reveal, .count').forEach((el) => io.observe(el));
 
-  selectEstimateService(S.services[0].id);
+  selectEstimateService(PAGE_SERVICE || S.services[0].id);
 })();

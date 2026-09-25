@@ -20,7 +20,10 @@ window.SITE = {
     warrantyYears: 5,
     // Paste your Formspree form ID (e.g. "xyzabcd") to receive submissions by email.
     // Leave blank and the form falls back to opening the visitor's email app.
-    formspreeId: ''
+    formspreeId: '',
+    // Your live site address, used for the sitemap and search-engine tags.
+    // With GitHub Pages this is https://<username>.github.io/<repo>/ unless you add a custom domain.
+    siteUrl: 'https://scammy37.github.io/home-improvement-services/'
   },
 
   // Set to false once the reviews below are replaced with real customer reviews.
@@ -153,7 +156,9 @@ window.SITE = {
     { name: 'Hannah K.', town: 'Riverside', service: 'decks', rating: 5, date: '2026-02-10', text: 'Repaired and restained our old deck instead of pushing a full replacement. Honest advice that saved us thousands.' }
   ],
 
-  // Before/after gallery. `scene` picks the illustration style.
+  // Before/after gallery. `scene` picks the illustration shown until you add photos.
+  // To use your own photos, drop them in images/projects/ and add, for example:
+  //   before: 'images/projects/deck-before.jpg', after: 'images/projects/deck-after.jpg'
   projects: [
     { title: 'Backyard composite deck', service: 'decks', town: 'Lakeview', scene: 'deck', detail: '420 sq ft · composite · lighting' },
     { title: 'Open-concept kitchen', service: 'kitchen', town: 'Northside', scene: 'kitchen', detail: 'Island · quartz · 3 weeks' },
@@ -162,6 +167,77 @@ window.SITE = {
     { title: 'Living room refresh', service: 'interior-painting', town: 'Your City', scene: 'room', detail: 'Walls, ceiling & trim · 2 days' },
     { title: 'Hardwood floor install', service: 'flooring', town: 'Northside', scene: 'floor', detail: '950 sq ft · engineered oak' }
   ],
+
+  // Extra content for each service's own page (services/<id>.html).
+  // Optional `photo: 'images/services/<id>.jpg'` replaces the illustration at the top of that page.
+  serviceDetails: {
+    decks: {
+      intro: 'A great deck adds living space, value and a place to gather. We design and build decks around the way you use your yard — from simple grade-level platforms to multi-level decks with pergolas, lighting and built-in seating.',
+      included: ['Design consultation & 3D layout', 'Permits & inspections handled', 'Footings, framing & hidden fasteners', 'Railings, stairs & skirting', 'Lighting, pergolas & shade options', 'Repairs, sanding, staining & sealing'],
+      timeline: 'Most new decks take 1–3 weeks from permit approval.',
+      faqs: [['Composite or wood?', 'Pressure-treated wood costs less up front. Composite and PVC cost more but need no staining and last 25+ years. We will show you both side by side.'], ['Do I need a permit?', 'Most attached or raised decks need one. We prepare drawings and handle the permit and inspections for you.']]
+    },
+    'interior-painting': {
+      intro: 'Fresh paint is the fastest way to transform a room. Our painters protect your floors and furniture, repair walls before painting, and leave crisp lines and a spotless room behind.',
+      included: ['Furniture moving & floor protection', 'Patching, sanding & caulking', 'Walls, ceilings, trim & doors', 'Color consultation', 'Cabinet refinishing', 'Daily clean-up'],
+      timeline: 'A typical room takes 1 day; a full floor 3–5 days.',
+      faqs: [['Do I need to move out?', 'No. We work room by room and use low-odor paints so you can stay at home.'], ['Which paint do you use?', 'We use premium lines from major brands, matched to each room — washable finishes for kitchens and kids\' rooms, flat for ceilings.']]
+    },
+    'exterior-painting': {
+      intro: 'Exterior paint protects your home from weather as much as it improves how it looks. We clean and repair surfaces first so the new finish bonds properly and lasts for years.',
+      included: ['Pressure washing', 'Scraping, sanding & priming', 'Wood rot & trim repair', 'Caulking gaps & seams', 'Body, trim, door & shutter colors', 'Final walkthrough & touch-ups'],
+      timeline: 'Most homes take 3–7 days, depending on weather.',
+      faqs: [['When is the best time to paint outside?', 'Dry days between roughly 50°F and 90°F. We schedule around the forecast.'], ['How long will it last?', 'With proper prep and quality paint, 7–10 years or more.']]
+    },
+    kitchen: {
+      intro: 'Your kitchen is the heart of the home. Whether you want a cabinet refresh or a full gut remodel with a new layout, we manage the design, trades and timeline from start to finish.',
+      included: ['Design & layout planning', 'Cabinets, countertops & hardware', 'Tile backsplashes & flooring', 'Plumbing & electrical updates', 'Lighting & appliance installation', 'One project manager from start to finish'],
+      timeline: 'Full remodels typically take 4–8 weeks of construction.',
+      faqs: [['Can I use my kitchen during the remodel?', 'For full remodels, usually not. We can help you set up a temporary kitchen area elsewhere in the house.'], ['Can you move walls or plumbing?', 'Yes. Layout changes add cost and time, and we will explain exactly how much before you decide.']]
+    },
+    bathroom: {
+      intro: 'From quick updates to spa-style makeovers, we build bathrooms that are beautiful, waterproof and easy to clean — including accessible designs for aging in place.',
+      included: ['Demolition & disposal', 'Waterproofing & tile', 'Walk-in showers & tubs', 'Vanities, fixtures & mirrors', 'Heated floors & ventilation', 'Grab bars & accessibility upgrades'],
+      timeline: 'Most bathrooms take 2–4 weeks.',
+      faqs: [['Can you convert my tub to a shower?', 'Yes — tub-to-shower conversions are one of our most popular projects.'], ['What about accessibility?', 'We install curbless showers, grab bars, comfort-height toilets and wider doorways.']]
+    },
+    basement: {
+      intro: 'Your basement may be the biggest untapped space in your home. We turn it into a warm, dry, finished space — a family room, office, gym, guest suite or all of the above.',
+      included: ['Moisture assessment', 'Framing, insulation & drywall', 'Electrical, lighting & HVAC', 'Egress windows', 'Bathrooms & wet bars', 'Flooring & finish carpentry'],
+      timeline: 'Most basements take 4–8 weeks.',
+      faqs: [['What about moisture?', 'We check for moisture first and recommend waterproofing if needed before we finish anything.'], ['Can the basement be a legal bedroom?', 'Yes, with a proper egress window and meeting local code. We handle the permit.']]
+    },
+    flooring: {
+      intro: 'New floors change the feel of an entire home. We install hardwood, engineered wood, luxury vinyl, tile and stone — with careful prep so floors stay flat, quiet and beautiful.',
+      included: ['Removal of old flooring', 'Subfloor leveling & repair', 'Hardwood, LVP, tile & stone', 'Stairs & transitions', 'Baseboards & trim', 'Furniture moving'],
+      timeline: 'Most rooms take 1–3 days; whole floors about a week.',
+      faqs: [['Which floor is best for kitchens and pets?', 'Luxury vinyl plank and tile are the most water- and scratch-resistant.'], ['Can you refinish existing hardwood?', 'Yes — sanding and refinishing often costs far less than replacement.']]
+    },
+    roofing: {
+      intro: 'Your roof protects everything under it. We repair and replace roofs with quality materials, thorough clean-up, and warranties from both us and the manufacturer.',
+      included: ['Free roof inspection', 'Full tear-off & disposal', 'Deck repair & underlayment', 'Shingle, metal & tile roofs', 'Flashing, vents & skylights', 'Gutters & magnetic nail sweep'],
+      timeline: 'Most roofs are replaced in 1–3 days.',
+      faqs: [['Do you work with insurance?', 'Yes. We document storm damage and work with your insurance adjuster.'], ['Repair or replace?', 'If your roof is under ~15 years old with isolated damage, a repair usually makes sense. We will tell you honestly.']]
+    },
+    siding: {
+      intro: 'New siding gives your home a new face, better insulation and less maintenance. We install vinyl, fiber cement and wood siding with careful attention to trim and weatherproofing.',
+      included: ['Removal of old siding', 'House wrap & insulation', 'Vinyl, fiber cement & wood', 'Soffit, fascia & trim', 'Window & door wraps', 'Clean-up & haul-away'],
+      timeline: 'Most homes take 1–2 weeks.',
+      faqs: [['Which siding lasts longest?', 'Fiber cement and quality vinyl can last 30–50 years with little upkeep.'], ['Will new siding lower my energy bills?', 'Adding insulated wrap or backer board under new siding can noticeably improve comfort and efficiency.']]
+    },
+    windows: {
+      intro: 'Energy-efficient windows and new doors make your home quieter, more comfortable and more secure. We measure precisely and install with proper flashing so they never leak.',
+      included: ['Precise measurement', 'Vinyl, fiberglass & wood windows', 'Entry, patio & storm doors', 'Flashing & insulation', 'Interior & exterior trim', 'Removal of old units'],
+      timeline: 'Most installs take 1–3 days once products arrive (usually 3–6 weeks).',
+      faqs: [['How much can new windows save?', 'Replacing old single-pane windows can cut heating and cooling costs noticeably and reduce drafts and noise.'], ['Do you install doors too?', 'Yes — front doors, patio sliders, French doors and storm doors.']]
+    },
+    handyman: {
+      intro: 'Every home has a to-do list. Our handymen handle the small jobs quickly and properly — one call, one visit, everything ticked off.',
+      included: ['Drywall patching', 'Door & trim repair', 'Fixture & fan installs', 'TV mounting & shelving', 'Caulking & weatherstripping', 'Punch lists for home sales'],
+      timeline: 'Usually scheduled within a week; urgent jobs within 48 hours.',
+      faqs: [['Is there a minimum charge?', 'Yes, a 2-hour minimum per visit. Bundle several small jobs to get the most out of it.'], ['Do you bring materials?', 'We can pick up materials for you, billed at cost, or use ones you already have.']]
+    }
+  },
 
   process: [
     ['Free consultation', 'Tell us about your project online or by phone. We visit, measure and listen.'],
