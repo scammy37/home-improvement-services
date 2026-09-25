@@ -1,0 +1,29 @@
+name: Check site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-is-current:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax
+        run: for f in js/*.js; do node --check "$f"; done
+      - name: Regenerate pages
+        run: node tools/build.mjs
+      - name: Fail if generated pages are out of date
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git status --porcelain
+            echo "::error::Generated pages are stale. Run 'node tools/build.mjs' and commit the result."
+            exit 1
+          fi

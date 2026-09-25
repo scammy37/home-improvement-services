@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://scammy37.github.io/home-improvement-services/sitemap.xml
