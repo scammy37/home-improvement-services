@@ -17,6 +17,7 @@ window.SITE = {
     license: 'License #000000',
     yearsInBusiness: 15,
     projectsCompleted: 1200,
+    reviewCount: 50,
     warrantyYears: 5,
     // Paste your Formspree form ID (e.g. "xyzabcd") to receive submissions by email.
     // Leave blank and the form falls back to opening the visitor's email app.

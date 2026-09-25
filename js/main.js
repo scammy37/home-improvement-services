@@ -291,18 +291,19 @@
 
   function renderSummary() {
     const total = reviews.length;
+    const displayedTotal = B.reviewCount ? `${B.reviewCount}+` : total;
     const avg = total ? reviews.reduce((t, r) => t + r.rating, 0) / total : 0;
     const avgText = avg.toFixed(1);
     $('#avg-rating').textContent = avgText;
     $('#avg-stars').textContent = starStr(Math.round(avg));
-    $('#review-count').textContent = `Based on ${total} reviews`;
+    $('#review-count').textContent = `Based on ${displayedTotal} reviews`;
     const statRating = $('#stat-rating');
     const heroRating = $('#hero-rating');
     const heroCount = $('#hero-rating-count');
     if (statRating) statRating.textContent = avgText + '★';
     if (heroRating) heroRating.textContent = avgText + ' rating';
-    if (heroCount) heroCount.textContent = `from ${total}+ local homeowners`;
-    $$('[data-rating-text]').forEach((el) => { el.textContent = `Rated ${avgText}/5 by ${total}+ homeowners`; });
+    if (heroCount) heroCount.textContent = `from ${displayedTotal} local homeowners`;
+    $$('[data-rating-text]').forEach((el) => { el.textContent = `Rated ${avgText}/5 by ${displayedTotal} homeowners`; });
     $('#rating-bars').innerHTML = [5, 4, 3, 2, 1].map((n) => {
       const c = reviews.filter((r) => r.rating === n).length;
       const pct = total ? (c / total) * 100 : 0;
