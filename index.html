@@ -3,217 +3,401 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Home Improvement Services is coming soon.">
-  <title>Home Improvement Services | Coming Soon</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --ink: #18221f;
-      --muted: #5d6962;
-      --paper: #f4f0e8;
-      --cream: #fffdf8;
-      --sage: #b9c8ae;
-      --fern: #315c49;
-      --coral: #dd7656;
-      --line: rgba(24, 34, 31, 0.14);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: Georgia, 'Times New Roman', serif;
-    }
-
-    .page {
-      min-height: 100vh;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .page::before,
-    .page::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .page::before {
-      width: 42rem;
-      height: 42rem;
-      right: -15rem;
-      top: -18rem;
-      background: var(--sage);
-      opacity: 0.62;
-    }
-
-    .page::after {
-      width: 20rem;
-      height: 20rem;
-      left: -9rem;
-      bottom: -8rem;
-      border: 1px solid var(--coral);
-      opacity: 0.45;
-    }
-
-    header,
-    main,
-    footer { position: relative; z-index: 1; }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 2rem clamp(1.5rem, 6vw, 6rem);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      font-size: 1.05rem;
-      font-weight: bold;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .mark {
-      width: 2rem;
-      height: 2rem;
-      display: grid;
-      place-items: center;
-      color: var(--cream);
-      background: var(--fern);
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-    }
-
-    .mark span { transform: rotate(45deg); font-size: 0.9rem; }
-
-    .status {
-      color: var(--fern);
-      font: 700 0.72rem/1.2 Arial, sans-serif;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    main {
-      display: grid;
-      place-items: center;
-      padding: 5rem clamp(1.5rem, 8vw, 9rem);
-    }
-
-    .content {
-      width: min(100%, 74rem);
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
-      gap: clamp(3rem, 9vw, 9rem);
-      align-items: center;
-    }
-
-    .eyebrow {
-      margin: 0 0 1.5rem;
-      color: var(--coral);
-      font: 700 0.78rem/1.2 Arial, sans-serif;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      max-width: 10ch;
-      margin: 0;
-      font-size: clamp(4rem, 9vw, 8.5rem);
-      line-height: 0.88;
-      letter-spacing: -0.04em;
-      font-weight: 500;
-    }
-
-    .intro {
-      max-width: 32rem;
-      margin: 2rem 0 0;
-      color: var(--muted);
-      font-size: clamp(1.1rem, 1.7vw, 1.35rem);
-      line-height: 1.55;
-    }
-
-    .note {
-      padding: 2rem;
-      background: var(--cream);
-      border: 1px solid var(--line);
-      border-radius: 1.2rem 1.2rem 1.2rem 0;
-      box-shadow: 0.8rem 0.8rem 0 var(--sage);
-    }
-
-    .note-label {
-      margin: 0 0 1.5rem;
-      color: var(--fern);
-      font: 700 0.72rem/1.2 Arial, sans-serif;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    .note p {
-      margin: 0;
-      font-size: 1.55rem;
-      line-height: 1.15;
-    }
-
-    footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 1.5rem clamp(1.5rem, 6vw, 6rem);
-      color: var(--muted);
-      border-top: 1px solid var(--line);
-      font: 0.72rem/1.4 Arial, sans-serif;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    @media (max-width: 700px) {
-      header { padding-top: 1.4rem; padding-bottom: 1.4rem; }
-      .status { display: none; }
-      main { padding-top: 4rem; padding-bottom: 4rem; }
-      .content { grid-template-columns: 1fr; gap: 3.5rem; }
-      h1 { font-size: clamp(4rem, 19vw, 6.5rem); }
-      .note { max-width: 22rem; }
-      footer { flex-direction: column; gap: 0.35rem; }
-    }
-  </style>
+  <title>Home Improvement Services | Decks, Painting & Remodeling</title>
+  <meta name="description" content="Decks, interior & exterior painting, kitchen and bathroom remodeling, flooring, roofing, siding and more. Get an instant estimate and a free consultation.">
+  <meta property="og:title" content="Home Improvement Services">
+  <meta property="og:description" content="Decks, painting, remodeling & more — get an instant estimate.">
+  <meta name="theme-color" content="#315c49">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 3 14h4v14h18V14h4z' fill='%23315c49'/%3E%3Crect x='13' y='18' width='6' height='10' fill='%23dd7656'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div class="page">
-    <header>
-      <div class="brand"><span class="mark"><span>+</span></span> Home Improvement Services</div>
-      <div class="status">A better home is on the way</div>
-    </header>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-    <main>
-      <div class="content">
-        <section>
-          <p class="eyebrow">Coming soon</p>
-          <h1>Make room for better.</h1>
-          <p class="intro">Thoughtful repairs, trusted craftsmanship, and the small improvements that make home feel more like yours.</p>
-        </section>
-
-        <aside class="note">
-          <p class="note-label">We're getting ready</p>
-          <p>Our new home improvement service is taking shape. Check back soon to see what we can build together.</p>
-        </aside>
-      </div>
-    </main>
-
-    <footer>
-      <span>Home Improvement Services</span>
-      <span>Coming soon · 2026</span>
-    </footer>
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <span data-bind="hours"></span>
+      <span class="topbar-right">
+        <span data-bind="license"></span>
+        <span aria-hidden="true">·</span>
+        <span>Free in-home consultations</span>
+      </span>
+    </div>
   </div>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="M16 3 3 14h4v14h18V14h4z"/><rect x="13" y="18" width="6" height="10"/></svg>
+        </span>
+        <span class="brand-name" data-bind="name"></span>
+      </a>
+      <nav class="main-nav" id="main-nav" aria-label="Main">
+        <a href="#services">Services</a>
+        <a href="#estimate">Estimate</a>
+        <a href="#projects">Projects</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="header-cta">
+        <a class="phone-link" data-bind-href="tel" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg><span data-bind="phone"></span></a>
+        <a class="btn btn-accent" href="#contact">Free Quote</a>
+        <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span class="stars" aria-hidden="true">★★★★★</span> <span id="hero-rating"></span></p>
+          <h1>Your home, <em>better</em> than you imagined.</h1>
+          <p class="lead" data-bind="tagline"></p>
+          <ul class="hero-points">
+            <li>Licensed &amp; insured</li>
+            <li><span><span data-bind="warrantyYears"></span>-year workmanship warranty</span></li>
+            <li>Upfront, itemized pricing</li>
+          </ul>
+          <div class="hero-actions">
+            <a class="btn btn-accent btn-lg" href="#estimate">Get an instant estimate</a>
+            <a class="btn btn-ghost btn-lg" href="#projects">See our work</a>
+          </div>
+        </div>
+
+        <form class="quick-quote reveal" id="quick-quote" aria-labelledby="qq-title">
+          <h2 id="qq-title">What can we build for you?</h2>
+          <p class="muted">Pick a service to start your free estimate.</p>
+          <div class="qq-grid" id="qq-services" role="radiogroup" aria-label="Service"></div>
+          <label class="field">
+            <span>ZIP code</span>
+            <input type="text" name="zip" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="e.g. 90210">
+          </label>
+          <button class="btn btn-primary btn-block" type="submit">Start my estimate →</button>
+          <p class="fine">No obligation · Takes 30 seconds</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- TRUST BAR -->
+    <section class="trust" aria-label="Why homeowners trust us">
+      <div class="container trust-inner">
+        <div class="stat"><strong class="count" data-count="yearsInBusiness">0</strong><span>Years in business</span></div>
+        <div class="stat"><strong class="count" data-count="projectsCompleted" data-suffix="+">0</strong><span>Projects completed</span></div>
+        <div class="stat"><strong id="stat-rating">5.0</strong><span>Average rating</span></div>
+        <div class="stat"><strong class="count" data-count="warrantyYears" data-suffix="-yr">0</strong><span>Warranty</span></div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section" id="services">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Our services</p>
+          <h2>One trusted team for every project</h2>
+          <p class="lead">From weekend fixes to whole-home transformations, our crews handle it all — so you only need one call.</p>
+        </div>
+        <div class="filters" id="service-filters" role="tablist" aria-label="Filter services"></div>
+        <div class="service-grid" id="service-grid"></div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="section section-dark" id="process">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">How it works</p>
+          <h2>A simple, stress-free process</h2>
+        </div>
+        <ol class="process" id="process-list"></ol>
+      </div>
+    </section>
+
+    <!-- ESTIMATE CALCULATOR -->
+    <section class="section" id="estimate">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Estimate calculator</p>
+          <h2>See what your project could cost</h2>
+          <p class="lead">Adjust the details below for an instant ballpark. Your exact price comes after a free on-site visit.</p>
+        </div>
+
+        <div class="estimator reveal">
+          <div class="est-form">
+            <div class="est-step">
+              <span class="step-num">1</span>
+              <label class="field">
+                <span>Service</span>
+                <select id="est-service"></select>
+              </label>
+            </div>
+
+            <div class="est-step">
+              <span class="step-num">2</span>
+              <div class="field">
+                <span>Project size — <strong id="est-qty-label"></strong></span>
+                <div class="range-row">
+                  <input type="range" id="est-qty-range" aria-label="Project size">
+                  <input type="number" id="est-qty" aria-label="Project size value">
+                </div>
+              </div>
+            </div>
+
+            <div class="est-step">
+              <span class="step-num">3</span>
+              <fieldset class="field">
+                <legend>Quality level</legend>
+                <div class="tiers" id="est-tiers"></div>
+              </fieldset>
+            </div>
+
+            <div class="est-step">
+              <span class="step-num">4</span>
+              <fieldset class="field">
+                <legend>Add-ons</legend>
+                <div class="addons" id="est-addons"></div>
+              </fieldset>
+            </div>
+
+            <div class="est-step">
+              <span class="step-num">5</span>
+              <fieldset class="field">
+                <legend>Home condition / access</legend>
+                <div class="seg" id="est-complexity">
+                  <label><input type="radio" name="complexity" value="0.95"><span>Easy</span></label>
+                  <label><input type="radio" name="complexity" value="1" checked><span>Typical</span></label>
+                  <label><input type="radio" name="complexity" value="1.15"><span>Challenging</span></label>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <aside class="est-result" aria-live="polite">
+            <p class="eyebrow">Estimated investment</p>
+            <p class="est-range"><span id="est-low">$0</span><span class="dash">–</span><span id="est-high">$0</span></p>
+            <div class="est-bar" aria-hidden="true"><span id="est-bar-fill"></span></div>
+            <dl class="est-breakdown" id="est-breakdown"></dl>
+            <p class="est-monthly">Financing from <strong id="est-monthly">$0</strong>/mo*</p>
+            <a class="btn btn-accent btn-block" href="#contact" id="est-send">Lock in a free on-site quote</a>
+            <p class="fine">*Illustrative: 10-year term at 8.99% APR on the midpoint, for approved buyers. Ballpark ranges only — not a binding quote.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS / BEFORE-AFTER -->
+    <section class="section section-tint" id="projects">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Recent projects</p>
+          <h2>Before &amp; after</h2>
+          <p class="lead">Drag the slider to see the transformation.</p>
+        </div>
+        <div class="project-grid" id="project-grid"></div>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="section" id="reviews">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Reviews</p>
+          <h2>Homeowners love working with us</h2>
+        </div>
+        <p class="sample-notice" id="sample-notice" hidden>Sample reviews shown for layout — replace with real customer reviews before launch.</p>
+
+        <div class="reviews-layout">
+          <aside class="rating-summary reveal">
+            <p class="big-rating" id="avg-rating">5.0</p>
+            <p class="stars stars-lg" id="avg-stars" aria-hidden="true"></p>
+            <p class="muted" id="review-count"></p>
+            <div class="rating-bars" id="rating-bars"></div>
+            <button class="btn btn-primary btn-block" id="open-review">Write a review</button>
+          </aside>
+
+          <div class="reviews-main">
+            <div class="reviews-toolbar">
+              <label class="field inline">
+                <span>Service</span>
+                <select id="review-filter"><option value="all">All services</option></select>
+              </label>
+              <label class="field inline">
+                <span>Sort</span>
+                <select id="review-sort">
+                  <option value="new">Newest</option>
+                  <option value="high">Highest rated</option>
+                  <option value="low">Lowest rated</option>
+                </select>
+              </label>
+            </div>
+            <div class="review-list" id="review-list"></div>
+            <button class="btn btn-ghost" id="more-reviews" hidden>Show more reviews</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <section class="cta-banner">
+      <div class="container cta-inner">
+        <div>
+          <h2>Ready to start your project?</h2>
+          <p>Book a free, no-pressure consultation today.</p>
+        </div>
+        <div class="cta-actions">
+          <a class="btn btn-light btn-lg" href="#contact">Request a quote</a>
+          <a class="btn btn-outline-light btn-lg" data-bind-href="tel" href="#">Call <span data-bind="phone"></span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="container faq-layout">
+        <div class="section-head left reveal">
+          <p class="eyebrow">FAQ</p>
+          <h2>Questions, answered</h2>
+          <p class="lead">Can't find what you're looking for? <a href="#contact">Send us a message</a>.</p>
+          <div class="area-card">
+            <h3>Areas we serve</h3>
+            <ul class="chips" id="area-list"></ul>
+          </div>
+        </div>
+        <div class="faq-list" id="faq-list"></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section section-tint" id="contact">
+      <div class="container contact-layout">
+        <div class="contact-info reveal">
+          <p class="eyebrow">Contact us</p>
+          <h2>Let's talk about your project</h2>
+          <p class="lead">Tell us what you have in mind. We reply within one business day — usually much sooner.</p>
+          <ul class="contact-list">
+            <li><span class="ci-icon">☎</span><div><strong>Phone</strong><a data-bind-href="tel" href="#"><span data-bind="phone"></span></a></div></li>
+            <li><span class="ci-icon">✉</span><div><strong>Email</strong><a data-bind-href="mailto" href="#"><span data-bind="email"></span></a></div></li>
+            <li><span class="ci-icon">⌂</span><div><strong>Office</strong><span data-bind="address"></span></div></li>
+            <li><span class="ci-icon">◷</span><div><strong>Hours</strong><span data-bind="hours"></span></div></li>
+          </ul>
+        </div>
+
+        <form class="contact-form reveal" id="contact-form" novalidate>
+          <div class="form-grid">
+            <label class="field"><span>Full name *</span><input name="name" required autocomplete="name"></label>
+            <label class="field"><span>Phone *</span><input name="phone" type="tel" required autocomplete="tel"></label>
+            <label class="field"><span>Email *</span><input name="email" type="email" required autocomplete="email"></label>
+            <label class="field"><span>ZIP code</span><input name="zip" inputmode="numeric" maxlength="5" autocomplete="postal-code"></label>
+            <label class="field span-2"><span>Service needed *</span><select name="service" id="contact-service" required></select></label>
+            <label class="field"><span>Budget</span>
+              <select name="budget">
+                <option value="">Not sure yet</option>
+                <option>Under $5,000</option>
+                <option>$5,000 – $15,000</option>
+                <option>$15,000 – $50,000</option>
+                <option>$50,000 – $100,000</option>
+                <option>$100,000+</option>
+              </select>
+            </label>
+            <label class="field"><span>Timeline</span>
+              <select name="timeline">
+                <option>As soon as possible</option>
+                <option>Within 1–3 months</option>
+                <option>3–6 months</option>
+                <option>Just planning</option>
+              </select>
+            </label>
+            <label class="field span-2"><span>Project details *</span><textarea name="message" rows="5" required placeholder="Size, materials, goals, anything we should know…"></textarea></label>
+            <label class="field span-2 check"><input type="checkbox" name="consent" required><span>I agree to be contacted about my project by phone, text or email. *</span></label>
+            <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          </div>
+          <button class="btn btn-accent btn-block btn-lg" type="submit">Request my free quote</button>
+          <p class="form-status" id="form-status" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand brand-light" href="#top">
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 3 3 14h4v14h18V14h4z"/><rect x="13" y="18" width="6" height="10"/></svg></span>
+          <span class="brand-name" data-bind="name"></span>
+        </a>
+        <p class="footer-tag" data-bind="tagline"></p>
+      </div>
+      <div>
+        <h3>Services</h3>
+        <ul id="footer-services"></ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#process">How it works</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Get in touch</h3>
+        <ul>
+          <li><a data-bind-href="tel" href="#"><span data-bind="phone"></span></a></li>
+          <li><a data-bind-href="mailto" href="#"><span data-bind="email"></span></a></li>
+          <li><span data-bind="address"></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© <span id="year"></span> <span data-bind="name"></span>. All rights reserved.</span>
+      <span data-bind="license"></span>
+    </div>
+  </footer>
+
+  <!-- Mobile sticky action bar -->
+  <div class="mobile-bar">
+    <a data-bind-href="tel" href="#">Call now</a>
+    <a href="#estimate">Estimate</a>
+    <a class="accent" href="#contact">Free quote</a>
+  </div>
+
+  <!-- Review modal -->
+  <dialog id="review-dialog" aria-labelledby="rd-title">
+    <form method="dialog" id="review-form" class="review-form">
+      <div class="dialog-head">
+        <h2 id="rd-title">Share your experience</h2>
+        <button type="button" class="icon-btn" id="close-review" aria-label="Close">×</button>
+      </div>
+      <fieldset class="field">
+        <legend>Your rating *</legend>
+        <div class="star-input" id="star-input" role="radiogroup" aria-label="Rating"></div>
+      </fieldset>
+      <div class="form-grid">
+        <label class="field"><span>Name *</span><input name="name" required maxlength="40"></label>
+        <label class="field"><span>Town</span><input name="town" maxlength="40"></label>
+        <label class="field span-2"><span>Service</span><select name="service" id="review-service"></select></label>
+        <label class="field span-2"><span>Your review *</span><textarea name="text" rows="4" required minlength="10" maxlength="800"></textarea></label>
+      </div>
+      <p class="fine">Reviews submitted here are saved in this browser for preview. Connect a review platform to publish them.</p>
+      <button class="btn btn-accent btn-block" type="submit">Submit review</button>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/scenes.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
