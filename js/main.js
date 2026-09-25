@@ -71,7 +71,7 @@
   /* ---------- Trust strip ---------- */
   const trustStrip = $('#trust-strip');
   if (trustStrip) {
-    const check = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#e5ebde"/><path d="m7 12.5 3.2 3.2L17 9" fill="none" stroke="#1f4338" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const check = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="none" stroke="#c9a063" stroke-opacity=".45"/><path d="m7 12.5 3.2 3.2L17 9" fill="none" stroke="#dcbc85" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     const points = [...(S.trustPoints || []), `${B.warrantyYears}-year warranty`];
     trustStrip.innerHTML = points.map((p) => `<li>${check}${esc(p)}</li>`).join('');
   }
@@ -101,6 +101,11 @@
       ...others.filter((s) => !featured.includes(s)).map((s) => serviceCard(s))
     ].join('');
   }
+  const marquee = $('#marquee-track');
+  if (marquee) {
+    const run = S.services.map((s) => `<span>${esc(s.name)}</span><i>✦</i>`).join('');
+    marquee.innerHTML = run + run; // two copies so the loop is seamless
+  }
   $('#footer-services').innerHTML = S.services.map((s) => `<li><a href="${pageUrl(s.id)}">${esc(s.name)}</a></li>`).join('');
 
   /* ---------- Hero collage (home page) ---------- */
@@ -108,7 +113,7 @@
   if (heroVisual) {
     const quote = S.reviews.find((r) => r.rating === 5 && r.text.length < 170) || S.reviews[0];
     const short = quote.text.length > 110 ? quote.text.slice(0, quote.text.lastIndexOf(' ', 105)) + '…' : quote.text;
-    const shield = '<svg viewBox="0 0 24 24" fill="none" stroke="#1f4338" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>';
+    const shield = '<svg viewBox="0 0 24 24" fill="none" stroke="#dcbc85" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>';
     heroVisual.innerHTML = `
       <div class="hv-card hv-main">${ART.scene('kitchen', true)}
         <div class="hv-caption"><div><strong>Open-concept kitchen</strong><small>Northside · finished in 3 weeks</small></div><span class="tag">After</span></div>

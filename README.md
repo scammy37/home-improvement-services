@@ -20,6 +20,7 @@ It's plain HTML, CSS and JavaScript. Open `index.html` in a browser, or host the
 - **A page for each service** at clean addresses like `/services/decks/` and `/services/kitchen/`, with its own intro, what's included, a pricing table, a timeline, an estimator already set to that service, matching projects and reviews, service-specific FAQs and links to the other services
 - **Real photo support** for the gallery and service pages; the built-in illustrations show until you add photos (see `images/README.md`)
 - **SEO basics:** business and service structured data (JSON-LD), canonical links, `sitemap.xml`, `robots.txt` and a custom 404 page
+- Dark luxury theme: warm charcoal, ivory type and antique-gold accents, with a service marquee and a footer wordmark
 - Self-hosted fonts (Instrument Serif and Inter), CSS scroll animations with a fallback, and zero violations in an axe-core accessibility audit
 - Sticky header with a reading-progress line, mobile menu, mobile call/estimate/quote bar, SEO meta tags and support for reduced-motion settings
 
@@ -46,7 +47,7 @@ Everything you'd normally change lives in **`js/data.js`**:
 node tools/build.mjs
 ```
 
-This rewrites the service pages (`decks/index.html`, `kitchen/index.html`, …), `404.html`, `sitemap.xml`, `robots.txt` and the structured-data block in `index.html`. It needs Node 18 or newer and nothing else. Commit the result. A GitHub Action (`Check site`) fails if you forget.
+This rewrites the service pages (`decks/index.html`, `kitchen/index.html`, …), `404.html`, `sitemap.xml`, `robots.txt` and the structured-data block in `index.html`, and stamps every CSS/JS link with a content fingerprint (`?v=…`) so visitors always get the latest files. It needs Node 18 or newer and nothing else. Commit the result. A GitHub Action (`Check site`) fails if you forget.
 
 ### Before you launch
 
