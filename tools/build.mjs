@@ -241,9 +241,9 @@ function servicePage(s) {
 
   ${shared.toast}
 
-  <script src="../js/data.js?v=1a2d5f6"></script>
+  <script src="../js/data.js"></script>
   <script src="../js/scenes.js"></script>
-  <script src="../js/main.js?v=1a2d5f6"></script>
+  <script src="../js/main.js"></script>
 </body>
 </html>
 `;

@@ -230,11 +230,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .trust-strip svg { width: 20px; height: 20px; flex: none; }
 
 /* Service marquee */
-.marquee { overflow: hidden; border-top: 1px solid var(--line); background: var(--paper-2); padding: 1.4rem 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
-.marquee-track { display: flex; align-items: center; gap: 2.2rem; width: max-content; animation: marquee 60s linear infinite; }
+.marquee { border-top: 1px solid var(--line); background: var(--paper-2); padding: 1.4rem 0; }
+.marquee-inner { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+/* Spacing uses margins, not gap, so each copy is exactly half the track and the loop has no jump */
+.marquee-track { display: flex; align-items: center; width: max-content; animation: marquee 60s linear infinite; }
+.marquee-track > * { margin-right: 2.2rem; }
 .marquee-track span { font: italic 400 clamp(1.6rem, 3vw, 2.4rem)/1 var(--serif); color: var(--ink-2); white-space: nowrap; }
 .marquee-track i { font-style: normal; color: var(--terra); font-size: .9rem; }
-.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee-inner:hover .marquee-track { animation-play-state: paused; }
 @keyframes marquee { to { transform: translateX(-50%); } }
 
 /* ==========================================================================

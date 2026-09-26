@@ -17,6 +17,8 @@ window.SITE = {
     license: 'License #000000',
     yearsInBusiness: 15,
     projectsCompleted: 1200,
+    // Total reviews you have across platforms (e.g. Google), shown as "50+". It is only used once
+    // showSampleReviewNotice is false; until then the site counts the reviews listed below.
     reviewCount: 50,
     warrantyYears: 5,
     // Paste your Formspree form ID (e.g. "xyzabcd") to receive submissions by email.
@@ -183,7 +185,7 @@ window.SITE = {
     { title: 'Hardwood floor install', service: 'flooring', town: 'Northside', scene: 'floor', detail: '950 sq ft · engineered oak' }
   ],
 
-  // Extra content for each service's own page (services/<id>.html).
+  // Extra content for each service's own page (<id>/index.html).
   // Optional `photo: 'images/services/<id>.jpg'` replaces the illustration at the top of that page.
   serviceDetails: {
     decks: {
@@ -261,11 +263,12 @@ window.SITE = {
     ['Final walkthrough', 'We walk the job with you, fix anything on the punch list and back it with our warranty.']
   ],
 
+  // {warrantyYears} and other {business field} placeholders are filled in from `business` above.
   faqs: [
     ['Are you licensed and insured?', 'Yes. We are fully licensed, bonded and insured, and we pull every permit your project requires.'],
     ['How accurate is the online estimate?', 'The calculator gives a realistic ballpark based on typical projects. Your final quote comes after a free on-site visit, where we measure and discuss materials.'],
     ['Do you offer financing?', 'Yes — we partner with lenders to offer flexible monthly payment plans for approved customers. Ask us during your consultation.'],
-    ['What warranty do you provide?', 'All workmanship is covered for 5 years, on top of any manufacturer warranties on materials.'],
+    ['What warranty do you provide?', 'All workmanship is covered for {warrantyYears} years, on top of any manufacturer warranties on materials.'],
     ['How soon can you start?', 'Small jobs can often be scheduled within a week. Larger remodels usually start 2–6 weeks after contract signing, depending on materials.'],
     ['Do I need to be home during the work?', 'No. Many clients provide a lockbox or code. Your project manager will keep you updated with photos every day.']
   ]
