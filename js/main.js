@@ -114,9 +114,10 @@
     const quote = S.reviews.find((r) => r.rating === 5 && r.text.length < 170) || S.reviews[0];
     const short = quote.text.length > 110 ? quote.text.slice(0, quote.text.lastIndexOf(' ', 105)) + '…' : quote.text;
     const shield = '<svg viewBox="0 0 24 24" fill="none" stroke="#dcbc85" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>';
+    const spotlight = S.projects.find((p) => p.service === 'kitchen') || S.projects[0];
     heroVisual.innerHTML = `
-      <div class="hv-card hv-main">${ART.scene('kitchen', true)}
-        <div class="hv-caption"><div><strong>Open-concept kitchen</strong><small>Northside · finished in 3 weeks</small></div><span class="tag">After</span></div>
+      <div class="hv-card hv-main">${ART.scene(spotlight.scene, true)}
+        <div class="hv-caption"><div><strong>${esc(spotlight.title)}</strong><small>${esc(spotlight.town)} · ${esc(spotlight.detail)}</small></div><span class="tag">After</span></div>
       </div>
       <div class="hv-card">${ART.scene('deck', true)}</div>
       <div class="hv-card hv-review">
@@ -133,7 +134,8 @@
   const processList = $('#process-list');
   if (processList) processList.innerHTML = S.process.map(([t, d]) => `<li><h3>${esc(t)}</h3><p>${esc(d)}</p></li>`).join('');
   const pageDetails = (S.serviceDetails || {})[PAGE_SERVICE] || {};
-  $('#faq-list').innerHTML = [...(pageDetails.faqs || []), ...S.faqs].map(([q, a], i) => `<details class="faq-item"${i === 0 ? ' open' : ''}><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('');
+  const fillIn = (text) => text.replace(/\{(\w+)\}/g, (m, key) => B[key] ?? m);
+  $('#faq-list').innerHTML = [...(pageDetails.faqs || []), ...S.faqs].map(([q, a], i) => `<details class="faq-item"${i === 0 ? ' open' : ''}><summary>${esc(fillIn(q))}</summary><p>${esc(fillIn(a))}</p></details>`).join('');
   const areaList = $('#area-list');
   if (areaList) areaList.innerHTML = B.serviceArea.map((a) => `<li>${esc(a)}</li>`).join('');
 
@@ -296,7 +298,8 @@
 
   function renderSummary() {
     const total = reviews.length;
-    const displayedTotal = B.reviewCount ? `${B.reviewCount}+` : total;
+    // Sample reviews can't back a "50+" claim, so count only what's listed until real reviews are in
+    const displayedTotal = B.reviewCount && !S.showSampleReviewNotice ? `${B.reviewCount}+` : total;
     const avg = total ? reviews.reduce((t, r) => t + r.rating, 0) / total : 0;
     const avgText = avg.toFixed(1);
     $('#avg-rating').textContent = avgText;
@@ -363,14 +366,28 @@
   const reviewForm = $('#review-form');
   const starInput = $('#star-input');
   let newRating = 0;
-  starInput.innerHTML = [1, 2, 3, 4, 5].map((n) => `<button type="button" data-n="${n}" role="radio" aria-checked="false" aria-label="${n} star${n > 1 ? 's' : ''}">★</button>`).join('');
+  starInput.innerHTML = [1, 2, 3, 4, 5].map((n) => `<button type="button" data-n="${n}" role="radio" aria-checked="false" tabindex="${n === 1 ? 0 : -1}" aria-label="${n} star${n > 1 ? 's' : ''}">★</button>`).join('');
   const paintStars = (n) => $$('button', starInput).forEach((b) => b.classList.toggle('on', Number(b.dataset.n) <= n));
+  const setRating = (n) => {
+    newRating = n;
+    $$('button', starInput).forEach((x) => {
+      const k = Number(x.dataset.n);
+      x.setAttribute('aria-checked', String(k === n));
+      x.tabIndex = k === (n || 1) ? 0 : -1;
+    });
+    paintStars(n);
+  };
   starInput.addEventListener('click', (e) => {
     const b = e.target.closest('button');
-    if (!b) return;
-    newRating = Number(b.dataset.n);
-    $$('button', starInput).forEach((x) => x.setAttribute('aria-checked', String(x === b)));
-    paintStars(newRating);
+    if (b) setRating(Number(b.dataset.n));
+  });
+  starInput.addEventListener('keydown', (e) => {
+    const step = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key];
+    if (!step) return;
+    e.preventDefault();
+    const n = Math.min(5, Math.max(1, (newRating || (step > 0 ? 0 : 2)) + step));
+    setRating(n);
+    $(`button[data-n="${n}"]`, starInput).focus();
   });
   starInput.addEventListener('mouseover', (e) => { const b = e.target.closest('button'); if (b) paintStars(Number(b.dataset.n)); });
   starInput.addEventListener('mouseleave', () => paintStars(newRating));
@@ -400,8 +417,7 @@
     saveLocal(local);
     reviews.unshift(r);
     reviewForm.reset();
-    newRating = 0;
-    paintStars(0);
+    setRating(0);
     dialog.close();
     Object.assign(reviewState, { filter: 'all', stars: 0, sort: 'new', shown: 6 });
     $('#review-filter').value = 'all';
@@ -543,7 +559,7 @@
       form.message.value = est.summary + '\n\n';
       form.message.dataset.fromEstimate = 'true';
     }
-    if (!form.classList.contains('finished')) showStep(1, false);
+    if (!form.classList.contains('finished') && current === 0) showStep(1, false);
     toast('Estimate added to your quote request');
   });
 
